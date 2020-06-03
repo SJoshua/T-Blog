@@ -3,3 +3,4 @@ A simple blog program.
 
 ## Members
 * SONG
+* JIUZHE

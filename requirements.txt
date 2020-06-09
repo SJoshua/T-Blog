@@ -1,0 +1,7 @@
+Flask>=1.1.2
+Flask-Bootstrap>=3.3.7.1
+Flask-Ext>=0.1
+flask-nav>=0.6
+Flask-WTF>=0.14.3
+Flask-Debug>=0.4.3
+email-validator>=1.1.1

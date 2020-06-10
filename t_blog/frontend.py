@@ -10,6 +10,7 @@ from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 from markupsafe import escape
 
+from .database import init_db
 from .forms import SignupForm
 from .nav import nav
 
@@ -29,6 +30,11 @@ def index():
 @frontend.route('/article/<int:article_id>')
 def show_article(article_id):
     return render_template('article.html', article_id = article_id)
+
+@frontend.route('/init_db')
+def init_database():
+    init_db()
+    return 'Done.'
 
 # Shows a long signup form, demonstrating form rendering.
 @frontend.route('/example-form/', methods=('GET', 'POST'))

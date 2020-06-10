@@ -8,10 +8,6 @@ class User(Base):
     email = Column(String(120), unique=True)
     password = Column(String(20))
     describe = Column(String(200),nullable=True)
-    def __init__(self, name=None, email=None, password=None):
-        self.name = name
-        self.email = email
-        self.password=password
 
     def __repr__(self):
         return '<User %r>' % (self.name)
@@ -20,9 +16,6 @@ class Tag(Base):
     __tablename__ = 'tag'
     name = Column(String(50), primary_key=True)
     describe = Column(String(200),nullnullable=True)
-    def __init__(self, name=None, describe=None):
-        self.name = name
-        self.describe=describe
     
     def __repr__(self):
         return '<Tag %r>' % (self.name)
@@ -30,8 +23,6 @@ class Tag(Base):
 class Category(Base):
     __tablename__ = 'category'
     name = Column(String(50), primary_key=True)
-    def __init__(self, name=None):
-        self.name = name
     
     def __repr__(self):
         return '<Category %r>' % (self.name)
@@ -44,11 +35,6 @@ class Blog(Base):
     content = Column(String(collation='utf8'))
     author_id= Column(String(50),ForeignKey('users.name'))
     Category_name=Column(String(50),ForeignKey('category.name'))
-
-    def __init__(self, title=None,date=None,content=None):
-        self.title=title
-        self.date=date
-        self.content=content
     
     def __repr__(self):
         return '<Blog %r>' % (self.id)
@@ -57,10 +43,7 @@ class Set_tag(Base):
     __tablename__ = 'set_tag'
     tag_name=Column(String(50),ForeignKey('tag.name'),primary_key=True)
     blog_id =Column(Integer,ForeignKey('blog.id'),primary_key=True)
-
-    def __init__(self):
         
-    
     def __repr__(self):
         return '<Set_tag %r>' % (self.id)
 
@@ -72,10 +55,7 @@ class Comment(Base):
     date = Column(String(50))
     ip = Column(String(50))
     author_nickname = Column(String(50))
-    father_comment =Column(Integer)
-
-     def __init__(self):
-        
+    father_comment =Column(Integer)   
     
     def __repr__(self):
         return '<Comment %r>' % (self.id)

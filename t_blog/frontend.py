@@ -15,27 +15,10 @@ from .nav import nav
 
 frontend = Blueprint('frontend', __name__)
 
-# We're adding a navbar as well through flask-navbar. In our example, the
-# navbar has an usual amount of Link-Elements, more commonly you will have a
-# lot more View instances.
 nav.register_element('frontend_top', Navbar(
-    View('Flask-Bootstrap', '.index'),
+    View('T-Blog', '.index'),
     View('Home', '.index'),
-    View('Forms Example', '.example_form'),
-    Subgroup(
-        'Docs',
-        Link('Flask-Bootstrap', 'http://pythonhosted.org/Flask-Bootstrap'),
-        Link('Flask-AppConfig', 'https://github.com/mbr/flask-appconfig'),
-        Link('Flask-Debug', 'https://github.com/mbr/flask-debug'),
-        Separator(),
-        Text('Bootstrap'),
-        Link('Getting started', 'http://getbootstrap.com/getting-started/'),
-        Link('CSS', 'http://getbootstrap.com/css/'),
-        Link('Components', 'http://getbootstrap.com/components/'),
-        Link('Javascript', 'http://getbootstrap.com/javascript/'),
-        Link('Customize', 'http://getbootstrap.com/customize/'), ),
-    Text('Using Flask-Bootstrap {}'.format(FLASK_BOOTSTRAP_VERSION)), ))
-
+    View('Admin', '.example_form'), ))
 
 # Our index-page just shows a quick explanation. Check out the template
 # "templates/index.html" documentation for more details.
@@ -43,6 +26,9 @@ nav.register_element('frontend_top', Navbar(
 def index():
     return render_template('index.html')
 
+@frontend.route('/article/<int:article_id>')
+def show_article(article_id):
+    return render_template('article.html', article_id = article_id)
 
 # Shows a long signup form, demonstrating form rendering.
 @frontend.route('/example-form/', methods=('GET', 'POST'))

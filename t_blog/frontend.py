@@ -10,7 +10,7 @@ from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 from markupsafe import escape
 
-from .database import init_db
+from .database import *
 from .forms import NewArticleForm
 from .nav import nav
 
@@ -29,7 +29,8 @@ def index():
 
 @frontend.route('/article/<int:article_id>')
 def show_article(article_id):
-    return render_template('article.html', article_id = article_id)
+    article = get_article(article_id)
+    return render_template('article.html', title=article.title, content=article.content, author=get_author_name(article.author), category=get_category_name(article.category))
 
 @frontend.route('/init_db')
 def init_database():
@@ -41,8 +42,8 @@ def new_article():
     form = NewArticleForm()
 
     if form.validate_on_submit():
-        flash('Good Work!')
-
+        insert_article(title=form.title.data, content=form.content.data, author=1, category=1)
+        
         return redirect(url_for('.index'))
 
     return render_template('new_article.html', form=form)

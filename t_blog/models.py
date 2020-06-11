@@ -1,3 +1,4 @@
+import datetime
 from sqlalchemy import Column, Integer, String, DateTime, Table, Boolean, Text, ForeignKey
 from .database import Base
 
@@ -10,11 +11,12 @@ class Article(Base):
     author = Column(Integer, ForeignKey('tb_users.id'))
     category = Column(Integer, ForeignKey('tb_categories.id'))
     
-    def __init__(self, title=None, content=None, author=None, category=0):
+    def __init__(self, title=None, content=None, author=None, category=1):
         self.title = title
         self.content = content
         self.author = author
         self.category = category
+        self.date = datetime.datetime.now()
 
     def __repr__(self):
         return '<Article %r>' % (self.id)
@@ -89,6 +91,7 @@ class Comment(Base):
         self.content = content
         self.ip = ip
         self.approved = approved
+        self.date = datetime.datetime.now()
 
     def __repr__(self):
         return '<Comment %r>' % (self.id)

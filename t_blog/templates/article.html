@@ -3,9 +3,13 @@
 {% block content %}
     <div class="container">
         <div class="jumbotron">
-            <h1>Welcome to T-Blog Article Page {{ article_id }} </h1>
-            <p>Blank Index</p>
+            <h5> Category: {{ category }} </h5>
+            <h1> {{ title }} </h1>
+            <h4> Author: {{ author }} </h4>
+            
+            <pre>{{ content }}</pre>
         </div>
+        
     </div>
 {%- endblock %}
  

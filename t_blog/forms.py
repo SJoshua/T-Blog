@@ -1,10 +1,10 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms.fields import *
-from wtforms.validators import Required
+from wtforms.widgets import *
+from wtforms.validators import *
 
 
-class NewArticleForm(Form):
+class NewArticleForm(FlaskForm):
     title = TextField(u'Title', validators=[Required()])
-    article = TextAreaField()
-    
+    content = TextAreaField(u'Article', render_kw={"rows": 20})
     submit = SubmitField(u'Publish')

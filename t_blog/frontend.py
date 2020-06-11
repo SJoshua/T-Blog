@@ -11,7 +11,7 @@ from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 from markupsafe import escape
 
 from .database import init_db
-from .forms import SignupForm
+from .forms import NewArticleForm
 from .nav import nav
 
 frontend = Blueprint('frontend', __name__)
@@ -19,7 +19,7 @@ frontend = Blueprint('frontend', __name__)
 nav.register_element('frontend_top', Navbar(
     View('T-Blog', '.index'),
     View('Home', '.index'),
-    View('Admin', '.example_form'), ))
+    View('Admin', '.new_article'), ))
 
 # Our index-page just shows a quick explanation. Check out the template
 # "templates/index.html" documentation for more details.
@@ -36,21 +36,13 @@ def init_database():
     init_db()
     return 'Done.'
 
-# Shows a long signup form, demonstrating form rendering.
-@frontend.route('/example-form/', methods=('GET', 'POST'))
-def example_form():
-    form = SignupForm()
+@frontend.route('/admin/new_article', methods=('GET', 'POST'))
+def new_article():
+    form = NewArticleForm()
 
     if form.validate_on_submit():
-        # We don't have anything fancy in our application, so we are just
-        # flashing a message when a user completes the form successfully.
-        #
-        # Note that the default flashed messages rendering allows HTML, so
-        # we need to escape things if we input user values:
-        flash('Hello, {}. You have successfully signed up'
-              .format(escape(form.name.data)))
+        flash('Good Work!')
 
-        # In a real application, you may wish to avoid this tedious redirect.
         return redirect(url_for('.index'))
 
-    return render_template('signup.html', form=form)
+    return render_template('new_article.html', form=form)

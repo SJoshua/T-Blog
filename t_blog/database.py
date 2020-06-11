@@ -31,6 +31,9 @@ def insert_article(title=None, content=None, author=None, category=None):
 def get_article(id):
     return db_session.query(Article).filter(Article.id == id).first()
 
+def get_articles():
+    return db_session.query(Article).order_by(Article.id.desc()).limit(10).all()
+
 def get_author_name(id):
     return db_session.query(User).filter(User.id == id).first().nickname
 

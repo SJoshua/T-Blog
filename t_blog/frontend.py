@@ -9,6 +9,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 from markupsafe import escape
+from markdown import markdown
 
 from .database import *
 from .forms import NewArticleForm
@@ -25,12 +26,16 @@ nav.register_element('frontend_top', Navbar(
 # "templates/index.html" documentation for more details.
 @frontend.route('/')
 def index():
-    return render_template('index.html')
+    articles = get_articles()
+    arr = []
+    for i in range(len(articles)):
+        arr.append((articles[i].id, articles[i].title))
+    return render_template('index.html', articles=arr)
 
 @frontend.route('/article/<int:article_id>')
 def show_article(article_id):
     article = get_article(article_id)
-    return render_template('article.html', title=article.title, content=article.content, author=get_author_name(article.author), category=get_category_name(article.category))
+    return render_template('article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category))
 
 @frontend.route('/init_db')
 def init_database():

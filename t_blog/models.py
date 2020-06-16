@@ -96,3 +96,15 @@ class Comment(Base):
     def __repr__(self):
         return '<Comment %r>' % (self.id)
 
+class Setting(Base):
+    __tablename__='tb_settings'
+    id = Column(Integer, primary_key=True)
+    key=Column(String(50, collation='utf8mb4_unicode_ci'))
+    value = Column(Text(collation='utf8mb4_unicode_ci'))
+
+    def __init__(self,key=None,value=None):
+        self.key=key
+        self.value=value
+
+    def __repr__(self):
+        return '<Setting %r>' % (self.id)

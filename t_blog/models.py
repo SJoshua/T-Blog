@@ -74,7 +74,7 @@ class Tag_Relation(Base):
         return '<Tag_Relation %r:%r>' % (article_id, tag_id)        
 
 class Comment(Base):
-    __tablename__ = 'tb_conments'
+    __tablename__ = 'tb_comments'
     id = Column(Integer, primary_key=True)
     article_id = Column(Integer, ForeignKey('tb_articles.id'))
     author = Column(String(50, collation='utf8mb4_unicode_ci'))

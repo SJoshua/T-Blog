@@ -39,3 +39,8 @@ def get_author_name(id):
 
 def get_category_name(id):
     return db_session.query(Category).filter(Category.id == id).first().name
+
+def insert_comment(article_id=0,author=None,email=None ,content=None, ip=None,approved=True):
+    new_comment = Comment(article_id=article_id,author=author.encode('utf-8'),email=email.encode('utf-8'),content=content.encode('utf-8'),ip=ip.encode('utf-8'),approved=approved)
+    db_session.add(new_comment)
+    db_session.commit()

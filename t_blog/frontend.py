@@ -12,7 +12,7 @@ from markupsafe import escape
 from markdown import markdown
 
 from .database import *
-from .forms import NewArticleForm
+from .forms import NewArticleForm,NewCommentForm
 from .nav import nav
 
 frontend = Blueprint('frontend', __name__)
@@ -20,7 +20,8 @@ frontend = Blueprint('frontend', __name__)
 nav.register_element('frontend_top', Navbar(
     View('T-Blog', '.index'),
     View('Home', '.index'),
-    View('Admin', '.new_article'), ))
+    View('Admin', '.new_article'),
+    View('Comment','.new_comment'),))
 
 # Our index-page just shows a quick explanation. Check out the template
 # "templates/index.html" documentation for more details.
@@ -52,3 +53,14 @@ def new_article():
         return redirect(url_for('.index'))
 
     return render_template('new_article.html', form=form)
+
+@frontend.route('/admin/new_comment',methods=('GET','POST'))
+def new_comment():
+    form = NewCommentForm()
+
+    if form.validate_on_submit():
+        insert_comment(article_id=form.article_id.data,author=form.author.data,email=form.email.data,content=form.content.data,ip=form.ip.data,approved=True)
+
+        return redirect(url_for('.index'))
+    
+    return render_template('new_comment.html',form=form)

@@ -37,7 +37,10 @@ def drop_article(article_id=None):
     db_session.query(Article).filter(Article.id == article_id).delete()
     db_session.commit()
 
-def get_comment(article_id):
+def get_comment(comment_id):
+    return db_session.query(Comment).filter(Comment.id==comment_id).first()
+
+def get_comments(article_id):
     return db_session.query(Comment).filter(Comment.article_id==article_id).order_by(Comment.id.desc()).limit(10).all()
 
 def get_article(id):
@@ -52,9 +55,16 @@ def get_author_name(id):
 def get_category_name(id):
     return db_session.query(Category).filter(Category.id == id).first().name
 
-def insert_comment(article_id=0,author=None,email=None ,content=None, ip=None,approved=True):
+def insert_comment(article_id=None,author=None,email=None ,content=None, ip=None,approved=True):
     new_comment = Comment(article_id=article_id,author=author.encode('utf-8'),email=email.encode('utf-8'),content=content.encode('utf-8'),ip=ip.encode('utf-8'),approved=approved)
     db_session.add(new_comment)
+    db_session.commit()
+
+def update_comment(comment_id=None,author=None,content=None):
+    db_session.query(Comment).filter(Comment.id==comment_id).update({"author":author,"content":content})
+
+def drop_comment(comment_id=None):
+    db_session.query(Comment).filter(Comment.id==comment_id).delete()
     db_session.commit()
 
 def verify_password(username=None, password=None):

@@ -143,7 +143,7 @@ def manage_comments(article_id):
         arr.append((comments[i].id, comments[i].author, markdown(comments[i].content), comments[i].date))
     return render_template('manage_comments.html', comments=arr)
 
-@frontend.route('/admin/edit_comments/<int:comment_id>', methods=('GET', 'POST'))
+@frontend.route('/admin/edit_comment/<int:comment_id>', methods=('GET', 'POST'))
 @login_required
 def edit_comment(comment_id):
     comment = get_comment(comment_id)
@@ -163,7 +163,7 @@ def edit_comment(comment_id):
 
     return render_template('edit_comment.html',form=form)
 
-@frontend.route('/admin/delete_comments/<int:comment_id>', methods=('GET', 'POST'))
+@frontend.route('/admin/delete_comment/<int:comment_id>', methods=('GET', 'POST'))
 @login_required
 def delete_comment(comment_id):
     # TODO: Add confirmation? (Frontend)

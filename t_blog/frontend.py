@@ -140,7 +140,7 @@ def manage_comments(article_id):
     comments = get_comments(article_id)
     arr = []
     for i in range(len(comments)):
-        arr.append((comments[i].id, comments[i].author, markdown(comments[i].content), comments[i].date))
+        arr.append((comments[i].id, comments[i].author,comments[i].email, markdown(comments[i].content), comments[i].date,comments[i].ip,comments[i].approved))
     return render_template('manage_comments.html', comments=arr)
 
 @frontend.route('/admin/edit_comment/<int:comment_id>', methods=('GET', 'POST'))

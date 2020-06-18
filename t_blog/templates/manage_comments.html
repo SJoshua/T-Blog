@@ -8,8 +8,11 @@
         {% for info in comments %}
             <div class="jumbotron">
                 <h2> {{ info[1] }} </h2>
-                <h2> {{ info[3] }} </h2>
                 <h2> {{ info[2] }} </h2>
+                <h2> {{ info[3] }} </h2>
+                <h2> {{ info[4] }} </h2>
+                <h2> {{ info[5] }} </h2>
+                <h2> {{ info[6] }} </h2>
                 <a href="/admin/edit_comment/{{ info[0] }}"><button>Edit</button></a>
                 <a href="/admin/delete_comment/{{ info[0] }}"><button>Delete</button></a>
             </div>

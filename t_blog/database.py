@@ -14,6 +14,10 @@ from t_blog.models import *
 
 def init_db():
     Base.metadata.create_all(bind=engine)
+    Comment.query.delete()
+    Article.query.delete()
+    User.query.delete()
+    Category.query.delete()
     new_admin = User(username='admin', password='admin', nickname='admin', email='admin@t_blog.com')
     default_category = Category(name='Uncategorized')
     db_session.add(new_admin)

@@ -62,6 +62,7 @@ def insert_comment(article_id=None,author=None,email=None ,content=None, ip=None
 
 def update_comment(comment_id=None,author=None,content=None):
     db_session.query(Comment).filter(Comment.id==comment_id).update({"author":author,"content":content})
+    db_session.commit()
 
 def drop_comment(comment_id=None):
     db_session.query(Comment).filter(Comment.id==comment_id).delete()

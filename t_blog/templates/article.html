@@ -9,7 +9,15 @@
         </div>
         <div class="jumbotron">
             {{ content | safe }}
-        </div>        
+        </div>
+        {% for info in comments %}
+            <div class="jumbotron">
+                <h4>Author:{{ info[1] }}</h4>
+                <h1>Date:{{ info[4] }}</h1>
+                <h1>Email:{{ info[3] }}</h1>
+                {{info[2] | safe}}
+            </div>
+        {% endfor %}        
     </div>
 {%- endblock %}
  

@@ -36,7 +36,11 @@ def index():
 @frontend.route('/article/<int:article_id>')
 def show_article(article_id):
     article = get_article(article_id)
-    return render_template('article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category))
+    comments = get_comment(article_id)
+    arr = []
+    for i in range(len(comments)):
+        arr.append((comments[i].id,comments[i].author,comments[i].content,comments[i].email,comments[i].date))
+    return render_template('article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category),comments=arr)
 
 @frontend.route('/init_db')
 def init_database():

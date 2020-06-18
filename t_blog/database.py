@@ -28,6 +28,9 @@ def insert_article(title=None, content=None, author=None, category=None):
     db_session.add(new_article)
     db_session.commit()
 
+def get_comment(article_id):
+    return db_session.query(Comment).filter(Comment.article_id==article_id).order_by(Comment.id.desc()).limit(10).all()
+
 def get_article(id):
     return db_session.query(Article).filter(Article.id == id).first()
 
@@ -44,3 +47,4 @@ def insert_comment(article_id=0,author=None,email=None ,content=None, ip=None,ap
     new_comment = Comment(article_id=article_id,author=author.encode('utf-8'),email=email.encode('utf-8'),content=content.encode('utf-8'),ip=ip.encode('utf-8'),approved=approved)
     db_session.add(new_comment)
     db_session.commit()
+

@@ -1,10 +1,3 @@
-# This contains our frontend; since it is a bit messy to use the @app.route
-# decorator style when using application factories, all of our routes are
-# inside blueprints. This is the front-facing blueprint.
-#
-# You can find out more about blueprints at
-# http://flask.pocoo.org/docs/blueprints/
-
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
@@ -29,8 +22,6 @@ nav.register_element('frontend_top', Navbar(
     ),
 ))
 
-# Our index-page just shows a quick explanation. Check out the template
-# "templates/index.html" documentation for more details.
 @frontend.route('/')
 def index():
     articles = get_articles()
@@ -48,6 +39,7 @@ def show_article(article_id):
         arr.append((comments[i].id,comments[i].author,comments[i].content,comments[i].email,comments[i].date))
     return render_template('article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category),comments=arr)
 
+# for development
 @frontend.route('/init_db')
 def init_database():
     init_db()
@@ -64,6 +56,15 @@ def new_article():
 
     return render_template('new_article.html', form=form)
 
+@frontend.route('/admin/manage_articles', methods=('GET', 'POST'))
+def manage_articles():
+    articles = get_articles()
+    arr = []
+    for i in range(len(articles)):
+        arr.append((articles[i].id, articles[i].title))
+    return render_template('manage_articles.html', articles=arr)
+
+
 @frontend.route('/admin/new_comment',methods=('GET','POST'))
 def new_comment():
     form = NewCommentForm()
@@ -74,10 +75,6 @@ def new_comment():
         return redirect(url_for('.index'))
     
     return render_template('new_comment.html',form=form)
-
-@frontend.route('/admin/manage_articles', methods=('GET', 'POST'))
-def manage_articles():
-    return "Building ..."
 
 @frontend.route('/admin/manage_comments', methods=('GET', 'POST'))
 def manage_comments():

@@ -13,13 +13,10 @@ Base.query = db_session.query_property()
 from t_blog.models import *
 
 def init_db():
-    # import all modules here that might define models so that
-    # they will be registered properly on the metadata.  Otherwise
-    # you will have to import them first before calling init_db()
     Base.metadata.create_all(bind=engine)
     new_admin = User(username='admin', password='admin', nickname='admin', email='admin@t_blog.com')
     default_category = Category(name='Uncategorized')
-    # db_session.add(new_admin)
+    db_session.add(new_admin)
     db_session.add(default_category)
     db_session.commit()
 
@@ -35,7 +32,7 @@ def get_article(id):
     return db_session.query(Article).filter(Article.id == id).first()
 
 def get_articles():
-    return db_session.query(Article).order_by(Article.id.desc()).limit(10).all()
+    return db_session.query(Article).order_by(Article.id.desc()).all()
 
 def get_author_name(id):
     return db_session.query(User).filter(User.id == id).first().nickname

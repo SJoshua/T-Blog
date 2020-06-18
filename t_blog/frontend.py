@@ -20,8 +20,14 @@ frontend = Blueprint('frontend', __name__)
 nav.register_element('frontend_top', Navbar(
     View('T-Blog', '.index'),
     View('Home', '.index'),
-    View('Admin', '.new_article'),
-    View('Comment','.new_comment'),))
+    Subgroup(
+        'Admin',
+        View('New Article', '.new_article'),
+        View('Manage Articles', '.manage_articles'),
+        View('Manage Comments', '.manage_comments'),
+        View('Site Settings', '.site_settings'),
+    ),
+))
 
 # Our index-page just shows a quick explanation. Check out the template
 # "templates/index.html" documentation for more details.
@@ -64,3 +70,15 @@ def new_comment():
         return redirect(url_for('.index'))
     
     return render_template('new_comment.html',form=form)
+
+@frontend.route('/admin/manage_articles', methods=('GET', 'POST'))
+def manage_articles():
+    return "Building ..."
+
+@frontend.route('/admin/manage_comments', methods=('GET', 'POST'))
+def manage_comments():
+    return "Building ..."
+
+@frontend.route('/admin/site_settings', methods=('GET', 'POST'))
+def site_settings():
+    return "Building ..."

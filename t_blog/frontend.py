@@ -31,13 +31,19 @@ def index():
 
 @frontend.route('/article/<int:article_id>', methods=('GET', 'POST'))
 def show_article(article_id):
+    article = get_article(article_id)
+    comments = get_comment(article_id)
+
+    if not article:
+        return render_template('404.html')
+
     form = NewCommentForm()
 
     if form.validate_on_submit():
+        # WARNING: UNSAFE!
+        # TODO: Add filter for content
         insert_comment(article_id=article_id, author=form.author.data, email=form.email.data, content=form.content.data, ip=request.remote_addr, approved=True)
 
-    article = get_article(article_id)
-    comments = get_comment(article_id)
     arr = []
     for i in range(len(comments)):
         arr.append((comments[i].id, comments[i].author, markdown(comments[i].content), comments[i].date))
@@ -69,7 +75,38 @@ def manage_articles():
         arr.append((articles[i].id, articles[i].title))
     return render_template('manage_articles.html', articles=arr)
 
-@frontend.route('/admin/manage_comments', methods=('GET', 'POST'))
+@frontend.route('/admin/edit_article/<int:article_id>', methods=('GET', 'POST'))
+def edit_article(article_id):
+    article = get_article(article_id)
+
+    if not article:
+        return render_template('404.html')
+
+    form = NewArticleForm()
+
+    if form.validate_on_submit():
+        update_article(article_id=article_id, title=form.title.data, content=form.content.data, category=1)
+        
+        return redirect(url_for('.index'))
+
+    form.title.data = article.title
+    form.content.data = article.content
+
+    return render_template('edit_article.html', form=form)
+
+@frontend.route('/admin/delete_article/<int:article_id>', methods=('GET', 'POST'))
+def delete_article(article_id):
+    # TODO: Add confirmation? (Frontend)
+    article = get_article(article_id)
+
+    if not article:
+        return render_template('404.html')
+    
+    drop_article(article_id)
+
+    return redirect(url_for('.index'))
+
+@frontend.route('/admin/manage_comments/<int:article_id>', methods=('GET', 'POST'))
 def manage_comments():
     return "Building ..."
 

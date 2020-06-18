@@ -29,6 +29,14 @@ def insert_article(title=None, content=None, author=None, category=None):
     db_session.add(new_article)
     db_session.commit()
 
+def update_article(article_id=None, title=None, content=None, category=None):
+    db_session.query(Article).filter(Article.id == article_id).update({"title": title, "content": content, "category": category})
+    db_session.commit()
+
+def drop_article(article_id=None):
+    db_session.query(Article).filter(Article.id == article_id).delete()
+    db_session.commit()
+
 def get_comment(article_id):
     return db_session.query(Comment).filter(Comment.article_id==article_id).order_by(Comment.id.desc()).limit(10).all()
 

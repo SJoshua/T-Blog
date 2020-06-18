@@ -9,7 +9,7 @@ class NewArticleForm(FlaskForm):
     submit = SubmitField(u'Publish')
 
 class NewCommentForm(FlaskForm):
-    author = StringField(u'Nickname',validators=[Required()])
-    email = StringField(u'Email',validators=[DataRequired(), Email()])
-    content = TextAreaField(u'Comment',render_kw={"rows":5})
+    author = StringField(u'Nickname', validators=[Required()])
+    email = StringField(u'Email', validators=[DataRequired(), Email()])
+    content = TextAreaField(u'Comment', render_kw={"rows":5}, validators=[Required()])
     submit = SubmitField(u'Submit')

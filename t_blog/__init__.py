@@ -5,6 +5,8 @@ from .database import db_session
 
 from .frontend import frontend
 from .nav import nav
+from .auth import auth
+from .login import login_manager
 
 def create_app():
     app = Flask(__name__)
@@ -13,8 +15,10 @@ def create_app():
 
     Bootstrap(app)
 
-    app.register_blueprint(frontend)
     nav.init_app(app)
+    login_manager.init_app(app)
+    app.register_blueprint(frontend)
+    app.register_blueprint(auth, url_prefix='/auth')
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):

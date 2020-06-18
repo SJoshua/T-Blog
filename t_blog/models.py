@@ -1,6 +1,9 @@
 import datetime
 from sqlalchemy import Column, Integer, String, DateTime, Table, Boolean, Text, ForeignKey
 from .database import Base
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+from .login import login_manager
 
 class Article(Base):
     __tablename__ = 'tb_articles'
@@ -21,13 +24,24 @@ class Article(Base):
     def __repr__(self):
         return '<Article %r>' % (self.id)
 
-class User(Base):
+class User(Base, UserMixin):
     __tablename__ = 'tb_users'
     id = Column(Integer, primary_key=True)
     username = Column(String(60, collation='utf8mb4_unicode_ci'), unique=True)
     password = Column(String(255))
     nickname = Column(String(60, collation='utf8mb4_unicode_ci'))
     email = Column(String(100), unique=True)
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def __init__(self, username=None, password=None, nickname=None, email=None):
         self.username = username
@@ -48,6 +62,11 @@ class Category(Base):
 
     def __repr__(self):
         return '<Category %r>' % (self.name)
+
+# callback function for flask-login extension
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 class Tag(Base):
     __tablename__ = 'tb_tags'

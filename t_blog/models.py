@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Table, Boolean, Text, 
 from .database import Base
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from .login import login_manager
+from .auth import login_manager
 
 class Article(Base):
     __tablename__ = 'tb_articles'
@@ -62,11 +62,6 @@ class Category(Base):
 
     def __repr__(self):
         return '<Category %r>' % (self.name)
-
-# callback function for flask-login extension
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 class Tag(Base):
     __tablename__ = 'tb_tags'

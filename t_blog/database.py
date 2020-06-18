@@ -57,3 +57,10 @@ def insert_comment(article_id=0,author=None,email=None ,content=None, ip=None,ap
     db_session.add(new_comment)
     db_session.commit()
 
+def verify_password(username=None, password=None):
+    return db_session.query(User).filter(User.username == username and User.password == password).first()
+
+# callback function for flask-login extension
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))

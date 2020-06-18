@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
+from flask_login import login_user, login_required, logout_user
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 from markupsafe import escape
 from markdown import markdown
@@ -56,7 +57,31 @@ def init_database():
     init_db()
     return 'Done.'
 
+@frontend.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = verify_password(username=form.username.data, password=form.password.data)
+        if user:
+            login_user(user)
+            flash(u'Welcome back, %s!' % user.nickname, 'success')
+            return redirect(request.args.get('next') or url_for('index'))
+        else:
+            flash(u'Username or password is incorrect, please try again.', 'danger')
+    if form.errors:
+        flash(u'Failed. Please try again.', 'danger')
+
+    return render_template('login.html', form=form)
+
+@frontend.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash(u'You are now logged out.', 'success')
+    return redirect(url_for('.index'))
+
 @frontend.route('/admin/new_article', methods=('GET', 'POST'))
+@login_required
 def new_article():
     form = NewArticleForm()
 
@@ -68,6 +93,7 @@ def new_article():
     return render_template('new_article.html', form=form)
 
 @frontend.route('/admin/manage_articles', methods=('GET', 'POST'))
+@login_required
 def manage_articles():
     articles = get_articles()
     arr = []
@@ -76,6 +102,7 @@ def manage_articles():
     return render_template('manage_articles.html', articles=arr)
 
 @frontend.route('/admin/edit_article/<int:article_id>', methods=('GET', 'POST'))
+@login_required
 def edit_article(article_id):
     article = get_article(article_id)
 
@@ -95,6 +122,7 @@ def edit_article(article_id):
     return render_template('edit_article.html', form=form)
 
 @frontend.route('/admin/delete_article/<int:article_id>', methods=('GET', 'POST'))
+@login_required
 def delete_article(article_id):
     # TODO: Add confirmation? (Frontend)
     article = get_article(article_id)
@@ -107,9 +135,12 @@ def delete_article(article_id):
     return redirect(url_for('.index'))
 
 @frontend.route('/admin/manage_comments/<int:article_id>', methods=('GET', 'POST'))
+@login_required
 def manage_comments():
     return "Building ..."
 
 @frontend.route('/admin/site_settings', methods=('GET', 'POST'))
+@login_required
 def site_settings():
     return "Building ..."
+

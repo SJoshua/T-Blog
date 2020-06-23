@@ -122,3 +122,48 @@ class Setting(Base):
 
     def __repr__(self):
         return '<Setting %r>' % (self.id)
+
+class Articlemeta(Base):
+    __tablename__='tb_articlesmeta'
+    id = Column(Integer, primary_key=True)
+    article_id = Column(Integer, ForeignKey('tb_articles.id'))
+    key=Column(String(50, collation='utf8mb4_unicode_ci'))
+    value = Column(Text(collation='utf8mb4_unicode_ci'))
+
+    def __init__(self,article_id=None,key=None,value=None):
+        self.article_id=article_id
+        self.key=key
+        self.value=value
+
+    def __repr__(self):
+        return '<Articlemeta %r>' % (self.id)
+
+class Usermeta(Base):
+    __tablename__='tb_usersmeta'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('tb_articles.id'))
+    key=Column(String(50, collation='utf8mb4_unicode_ci'))
+    value = Column(Text(collation='utf8mb4_unicode_ci'))
+
+    def __init__(self,user_id=None,key=None,value=None):
+        self.user_id=user_id
+        self.key=key
+        self.value=value
+
+    def __repr__(self):
+        return '<Usermeta %r>' % (self.id)
+
+class Commentmeta(Base):
+    __tablename__='tb_commentsmeta'
+    id = Column(Integer, primary_key=True)
+    comment_id = Column(Integer, ForeignKey('tb_articles.id'))
+    key=Column(String(50, collation='utf8mb4_unicode_ci'))
+    value = Column(Text(collation='utf8mb4_unicode_ci'))
+
+    def __init__(self,comment_id=None,key=None,value=None):
+        self.comment_id=comment_id
+        self.key=key
+        self.value=value
+
+    def __repr__(self):
+        return '<Commentmeta %r>' % (self.id)

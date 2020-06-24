@@ -19,7 +19,7 @@ def init_db():
     User.query.delete()
     Category.query.delete()
     new_admin = User(username='admin', password='admin', nickname='admin', email='admin@t_blog.com')
-    default_category = Category(name='Uncategorized')
+    default_category = Category(id=1, name='Uncategorized')
     db_session.add(new_admin)
     db_session.add(default_category)
     db_session.commit()
@@ -52,13 +52,25 @@ def get_author_name(id):
 def get_category_name(id):
     return db_session.query(Category).filter(Category.id == id).first().name
 
+def get_setting_value(key):
+    return db_session.query(Setting).filter(Setting.key == key).first().value
+
+def update_setting(key, value):
+    if get_setting_value(key):
+        db_session.query(Setting).filter(Setting.key == key).update({"value": value})
+    else:
+        db_session.add(Setting(key=key, value=value))
+    db_session.commit()
+
 def insert_comment(article_id=0,author=None,email=None ,content=None, ip=None,approved=True):
     new_comment = Comment(article_id=article_id,author=author.encode('utf-8'),email=email.encode('utf-8'),content=content.encode('utf-8'),ip=ip.encode('utf-8'),approved=approved)
     db_session.add(new_comment)
     db_session.commit()
 
 def verify_password(username=None, password=None):
-    return db_session.query(User).filter(User.username == username and User.password == password).first()
+    user = db_session.query(User).filter(User.username == username).first()
+    if user and check_password_hash(user.password, password):
+        return user
 
 # callback function for flask-login extension
 @login_manager.user_loader

@@ -68,11 +68,11 @@ def insert_category(name=None):
     db_session.add(new_category)
     db_session.commit()
 
-def update_tag(category_id=None,name=None):
+def update_category(category_id=None,name=None):
     db_session.query(Category).filter(Category.id==category_id).update({"name":name})
     db_session.commit()
 
-def drop_tag(category_id=None):
+def drop_category(category_id=None):
     db_session.query(Category).filter(Category.id==category_id).delete()
     db_session.commit()
 
@@ -94,7 +94,17 @@ def get_author_name(id):
 def get_category_name(id):
     return db_session.query(Category).filter(Category.id == id).first().name
 
+def get_tag(id):
+    return db_session.query(Tag).filter(Tag.id==id).first()
 
+def get_tags():
+    return db_session.query(Tag).order_by(Tag.id.desc()).all()
+
+def get_category(id):
+    return db_session.query(Category).filter(Category.id==id).first()
+
+def get_categories():
+    return db_session.query(Category).order_by(Category.id.desc()).all()
 
 def verify_password(username=None, password=None):
     return db_session.query(User).filter(User.username == username and User.password == password).first()

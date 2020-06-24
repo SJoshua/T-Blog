@@ -20,7 +20,9 @@ nav.register_element('frontend_top', Navbar(
         View('Manage Articles', '.manage_articles'),
         View('Site Settings', '.site_settings'),
         View('New Tag','.new_tag'),
+        View('Manage Tags','.manage_tags'),
         View('New Category','.new_category'),
+        View('Manage Categories','.manage_categories')
     ),
 ))
 
@@ -195,14 +197,96 @@ def new_tag():
 
     return render_template('new_tag.html', form=form)
 
+@frontend.route('/admin/manage_tags', methods=('GET', 'POST'))
+@login_required
+def manage_tags():
+    tags = get_tags()
+    arr = []
+    for i in range(len(tags)):
+        arr.append((tags[i].id, tags[i].name))
+    return render_template('manage_tags.html', tags=arr)
+
+@frontend.route('/admin/edit_tag/<int:tag_id>', methods=('GET', 'POST'))
+@login_required
+def edit_tag(tag_id):
+    tag = get_tag(tag_id)
+
+    if not tag:
+        return render_template('404.html')
+
+    form = NewTagForm()
+
+    if form.validate_on_submit():
+        update_tag(tag_id=tag_id, name=form.name.data)
+        
+        return redirect(url_for('.index'))
+
+    form.name=tag.name
+
+    return render_template('edit_tag.html', form=form)
+
+@frontend.route('/admin/delete_tag/<int:tag_id>', methods=('GET', 'POST'))
+@login_required
+def delete_tag(tag_id):
+    # TODO: Add confirmation? (Frontend)
+    tag = get_tag(tag_id)
+
+    if not tag:
+        return render_template('404.html')
+    
+    drop_tag(tag_id)
+
+    return redirect(url_for('.index'))
+
 @frontend.route('/admin/new_category', methods=('GET', 'POST'))
 @login_required
 def new_category():
     form = NewCategoryForm()
 
     if form.validate_on_submit():
-        insert_tag(name=form.name.data)
+        insert_category(name=form.name.data)
         
         return redirect(url_for('.index'))
 
     return render_template('new_category.html', form=form)
+
+@frontend.route('/admin/manage_categories', methods=('GET', 'POST'))
+@login_required
+def manage_categories():
+    categories = get_categories()
+    arr = []
+    for i in range(len(categories)):
+        arr.append((categories[i].id, categories[i].name))
+    return render_template('manage_categories.html', categories=arr)
+
+@frontend.route('/admin/edit_category/<int:category_id>', methods=('GET', 'POST'))
+@login_required
+def edit_category(category_id):
+    category = get_category(category_id)
+
+    if not category:
+        return render_template('404.html')
+
+    form = NewCategoryForm()
+
+    if form.validate_on_submit():
+        update_category(category_id=category_id, name=form.name.data)
+        
+        return redirect(url_for('.index'))
+
+    form.name=category.name
+
+    return render_template('edit_category.html', form=form)
+
+@frontend.route('/admin/delete_category/<int:category_id>', methods=('GET', 'POST'))
+@login_required
+def delete_category(category_id):
+    # TODO: Add confirmation? (Frontend)
+    category = get_category(category_id)
+
+    if not category:
+        return render_template('404.html')
+    
+    drop_category(category_id)
+
+    return redirect(url_for('.index'))

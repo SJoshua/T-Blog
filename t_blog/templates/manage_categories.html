@@ -3,13 +3,13 @@
 {% block content %}
     <div class="container">
         <div class="jumbotron">
-            <h1>Manage Tags</h1>
+            <h1>Manage Category</h1>
         </div>
-        {% for info in tags %}
+        {% for info in categories %}
             <div class="jumbotron">
                 <h2> {{ info[1] }} </h2>
-                <a href="/admin/edit_tag/{{ info[0] }}"><button>Edit</button></a>
-                <a href="/admin/delete_tag/{{ info[0] }}"><button>Delete</button></a>
+                <a href="/admin/edit_category/{{ info[0] }}"><button>Edit</button></a>
+                <a href="/admin/delete_category/{{ info[0] }}"><button>Delete</button></a>
             </div>
         {% endfor %}
     </div> 

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_user, login_required, logout_user
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 from markupsafe import escape
 from markdown import markdown
@@ -90,7 +90,7 @@ def new_article():
     form = NewArticleForm()
 
     if form.validate_on_submit():
-        insert_article(title=form.title.data, content=form.content.data, author=current_user.id, category=1)
+        insert_article(title=form.title.data, content=form.content.data, author=1, category=1)
         
         return redirect(url_for('.index'))
 

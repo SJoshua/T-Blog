@@ -14,7 +14,7 @@ class Article(Base):
     author = Column(Integer, ForeignKey('tb_users.id'))
     category = Column(Integer, ForeignKey('tb_categories.id'))
     
-    def __init__(self, title=None, content=None, author=None, category=None):
+    def __init__(self, title=None, content=None, author=None, category=1):
         self.title = title
         self.content = content
         self.author = author
@@ -32,9 +32,20 @@ class User(Base, UserMixin):
     nickname = Column(String(60, collation='utf8mb4_unicode_ci'))
     email = Column(String(100), unique=True)
 
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
     def __init__(self, username=None, password=None, nickname=None, email=None):
         self.username = username
-        self.password = generate_password_hash(password)
+        self.password = password
         self.nickname = nickname
         self.email = email
 
@@ -46,8 +57,7 @@ class Category(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50, collation='utf8mb4_unicode_ci'))
     
-    def __init__(self, id=None, name=None):
-        self.id = id
+    def __init__(self, name=None):
         self.name = name
 
     def __repr__(self):
@@ -103,7 +113,7 @@ class Comment(Base):
 class Setting(Base):
     __tablename__='tb_settings'
     id = Column(Integer, primary_key=True)
-    key = Column(String(50, collation='utf8mb4_unicode_ci'))
+    key=Column(String(50, collation='utf8mb4_unicode_ci'))
     value = Column(Text(collation='utf8mb4_unicode_ci'))
 
     def __init__(self,key=None,value=None):

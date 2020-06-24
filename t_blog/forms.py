@@ -18,3 +18,11 @@ class NewCommentForm(FlaskForm):
     email = StringField(u'Email', validators=[DataRequired(), Email()])
     content = TextAreaField(u'Comment', render_kw={"rows":5}, validators=[Required()])
     submit = SubmitField(u'Submit')
+
+class NewTagForm(FlaskForm):
+    name = StringField(u'name', validators=[Required()])
+    submit = SubmitField(u'Submit')
+
+class NewCategoryForm(FlaskForm):
+    name = StringField(u'name', validators=[Required()])
+    submit = SubmitField(u'Submit')

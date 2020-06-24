@@ -19,6 +19,8 @@ nav.register_element('frontend_top', Navbar(
         View('New Article', '.new_article'),
         View('Manage Articles', '.manage_articles'),
         View('Site Settings', '.site_settings'),
+        View('New Tag','.new_tag'),
+        View('New Category','.new_category'),
     ),
 ))
 
@@ -33,7 +35,7 @@ def index():
 @frontend.route('/article/<int:article_id>', methods=('GET', 'POST'))
 def show_article(article_id):
     article = get_article(article_id)
-    comments = get_comment(article_id)
+    comments = get_comments(article_id)
 
     if not article:
         return render_template('404.html')
@@ -136,11 +138,71 @@ def delete_article(article_id):
 
 @frontend.route('/admin/manage_comments/<int:article_id>', methods=('GET', 'POST'))
 @login_required
-def manage_comments():
-    return "Building ..."
+def manage_comments(article_id):
+    comments = get_comments(article_id)
+    arr = []
+    for i in range(len(comments)):
+        arr.append((comments[i].id, comments[i].author,comments[i].email, markdown(comments[i].content), comments[i].date,comments[i].ip,comments[i].approved))
+    return render_template('manage_comments.html', comments=arr)
+
+@frontend.route('/admin/edit_comment/<int:comment_id>', methods=('GET', 'POST'))
+@login_required
+def edit_comment(comment_id):
+    comment = get_comment(comment_id)
+    
+    if not comment:
+        return render_template('404.html')
+    
+    form = NewCommentForm()
+    
+    if form.validate_on_submit():
+        update_comment(comment_id=comment_id,author=form.author.data,content=form.content.data)
+
+        return redirect(url_for('.index'))
+    
+    form.author.data=comment.author
+    form.content.data=comment.content
+
+    return render_template('edit_comment.html',form=form)
+
+@frontend.route('/admin/delete_comment/<int:comment_id>', methods=('GET', 'POST'))
+@login_required
+def delete_comment(comment_id):
+    # TODO: Add confirmation? (Frontend)
+    comment = get_comment(comment_id)
+
+    if not comment:
+        return render_template('404.html')
+    
+    drop_comment(comment_id)
+
+    return redirect(url_for('.index'))
 
 @frontend.route('/admin/site_settings', methods=('GET', 'POST'))
 @login_required
 def site_settings():
     return "Building ..."
 
+@frontend.route('/admin/new_tag', methods=('GET', 'POST'))
+@login_required
+def new_tag():
+    form = NewTagForm()
+
+    if form.validate_on_submit():
+        insert_tag(name=form.name.data)
+        
+        return redirect(url_for('.index'))
+
+    return render_template('new_tag.html', form=form)
+
+@frontend.route('/admin/new_category', methods=('GET', 'POST'))
+@login_required
+def new_category():
+    form = NewCategoryForm()
+
+    if form.validate_on_submit():
+        insert_tag(name=form.name.data)
+        
+        return redirect(url_for('.index'))
+
+    return render_template('new_category.html', form=form)

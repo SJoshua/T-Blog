@@ -37,7 +37,49 @@ def drop_article(article_id=None):
     db_session.query(Article).filter(Article.id == article_id).delete()
     db_session.commit()
 
-def get_comment(article_id):
+def insert_comment(article_id=None,author=None,email=None ,content=None, ip=None,approved=True):
+    new_comment = Comment(article_id=article_id,author=author.encode('utf-8'),email=email.encode('utf-8'),content=content.encode('utf-8'),ip=ip.encode('utf-8'),approved=approved)
+    db_session.add(new_comment)
+    db_session.commit()
+
+def update_comment(comment_id=None,author=None,content=None):
+    db_session.query(Comment).filter(Comment.id==comment_id).update({"author":author,"content":content})
+    db_session.commit()
+
+def drop_comment(comment_id=None):
+    db_session.query(Comment).filter(Comment.id==comment_id).delete()
+    db_session.commit()
+
+def insert_tag(name=None):
+    new_tag = Tag(name=name)
+    db_session.add(new_tag)
+    db_session.commit()
+
+def update_tag(tag_id=None,name=None):
+    db_session.query(Tag).filter(Tag.id==tag_id).update({"name":name})
+    db_session.commit()
+
+def drop_tag(tag_id=None):
+    db_session.query(Tag).filter(Tag.id==tag_id).delete()
+    db_session.commit()
+
+def insert_category(name=None):
+    new_category = Category(name=name)
+    db_session.add(new_category)
+    db_session.commit()
+
+def update_tag(category_id=None,name=None):
+    db_session.query(Category).filter(Category.id==category_id).update({"name":name})
+    db_session.commit()
+
+def drop_tag(category_id=None):
+    db_session.query(Category).filter(Category.id==category_id).delete()
+    db_session.commit()
+
+def get_comment(comment_id):
+    return db_session.query(Comment).filter(Comment.id==comment_id).first()
+
+def get_comments(article_id):
     return db_session.query(Comment).filter(Comment.article_id==article_id).order_by(Comment.id.desc()).limit(10).all()
 
 def get_article(id):
@@ -60,11 +102,6 @@ def update_setting(key, value):
         db_session.query(Setting).filter(Setting.key == key).update({"value": value})
     else:
         db_session.add(Setting(key=key, value=value))
-    db_session.commit()
-
-def insert_comment(article_id=0,author=None,email=None ,content=None, ip=None,approved=True):
-    new_comment = Comment(article_id=article_id,author=author.encode('utf-8'),email=email.encode('utf-8'),content=content.encode('utf-8'),ip=ip.encode('utf-8'),approved=approved)
-    db_session.add(new_comment)
     db_session.commit()
 
 def verify_password(username=None, password=None):

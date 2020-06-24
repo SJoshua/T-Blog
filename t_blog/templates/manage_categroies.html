@@ -1,0 +1,18 @@
+{%- extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Manage Articles</h1>
+        </div>
+        {% for info in articles %}
+            <div class="jumbotron">
+                <h2> {{ info[1] }} </h2>
+                <a href="/admin/edit_article/{{ info[0] }}"><button>Edit</button></a>
+                <a href="/admin/manage_comments/{{ info[0] }}"><button>Manage Comments</button></a>
+                <a href="/admin/delete_article/{{ info[0] }}"><button>Delete</button></a>
+            </div>
+        {% endfor %}
+    </div> 
+{%- endblock %}
+ 

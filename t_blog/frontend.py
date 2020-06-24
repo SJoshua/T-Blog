@@ -19,6 +19,8 @@ nav.register_element('frontend_top', Navbar(
         View('New Article', '.new_article'),
         View('Manage Articles', '.manage_articles'),
         View('Site Settings', '.site_settings'),
+        View('New Tag','.new_tag'),
+        View('New Category','.new_category'),
     ),
 ))
 
@@ -181,3 +183,26 @@ def delete_comment(comment_id):
 def site_settings():
     return "Building ..."
 
+@frontend.route('/admin/new_tag', methods=('GET', 'POST'))
+@login_required
+def new_tag():
+    form = NewTagForm()
+
+    if form.validate_on_submit():
+        insert_tag(name=form.name.data)
+        
+        return redirect(url_for('.index'))
+
+    return render_template('new_tag.html', form=form)
+
+@frontend.route('/admin/new_category', methods=('GET', 'POST'))
+@login_required
+def new_category():
+    form = NewCategoryForm()
+
+    if form.validate_on_submit():
+        insert_tag(name=form.name.data)
+        
+        return redirect(url_for('.index'))
+
+    return render_template('new_category.html', form=form)

@@ -78,6 +78,9 @@ def drop_category(category_id=None):
     db_session.query(Category).filter(Category.id==category_id).delete()
     db_session.commit()
 
+def get_user(user_id):
+    return db_session(User).filter(User.id==user_id).first()
+
 def get_comment(comment_id):
     return db_session.query(Comment).filter(Comment.id==comment_id).first()
 

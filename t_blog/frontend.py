@@ -69,13 +69,28 @@ def login():
         if user:
             login_user(user)
             flash(u'Welcome back, %s!' % user.nickname, 'success')
-            return redirect(request.args.get('next') or url_for('index'))
+            return redirect(request.args.get('next') or url_for('frontend.index'))
         else:
             flash(u'Username or password is incorrect, please try again.', 'danger')
     if form.errors:
         flash(u'Failed. Please try again.', 'danger')
 
     return render_template('login.html', form=form)
+
+@frontend.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(email=form.email.data,
+                    username=form.username.data,
+                    password=form.password.data,
+                    nickname=form.nickname.data)
+        db_session.add(user)
+        db_session.commit()
+        flash('Registration Succeed!')
+        return redirect(url_for('frontend.login'))
+    return render_template('register.html', form=form)
+
 
 @frontend.route('/logout')
 @login_required

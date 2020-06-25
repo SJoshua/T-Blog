@@ -24,6 +24,8 @@ def init_db():
     db_session.add(default_category)
     db_session.commit()
 
+
+
 def insert_article(title=None, content=None, author=None, category=None):
     new_article = Article(title=title.encode('utf-8'), content=content.encode('utf-8'), author=author, category=category)
     db_session.add(new_article)

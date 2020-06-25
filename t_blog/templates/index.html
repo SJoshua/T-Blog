@@ -8,6 +8,7 @@
         {% for info in articles %}
             <div class="jumbotron">
                 <h2><a href="/article/{{ info[0] }}"> {{ info[1] }} </a></h2>
+                <p><b>@{{ info[2] }}</b> at <i>{{ info[3] }}</i>:</p>
             </div>
         {% endfor %}
     </div> 

@@ -31,7 +31,7 @@ def index():
     articles = get_articles()
     arr = []
     for i in range(len(articles)):
-        arr.append((articles[i].id, articles[i].title))
+        arr.append((articles[i].id, articles[i].title,articles[i].author,articles[i].date))
     return render_template('index.html', articles=arr)
 
 @frontend.route('/article/<int:article_id>', methods=('GET', 'POST'))

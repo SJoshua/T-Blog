@@ -58,7 +58,8 @@ class Tag(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50, collation='utf8mb4_unicode_ci'), unique=True)
 
-    def __init__(self, name=None):
+    def __init__(self, id=None, name=None):
+        self.id = id
         self.name = name
 
     def __repr__(self):

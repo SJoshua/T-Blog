@@ -78,6 +78,11 @@ def drop_category(category_id=None):
     db_session.query(Category).filter(Category.id==category_id).delete()
     db_session.commit()
 
+def insert_tag_relation(article_id=None,tag_id=None):
+    new_tag_relation=Tag_Relation(article_id=article_id,tag_id=tag_id)
+    db_session.add(new_tag_relation)
+    db_session.commit()
+
 def get_user(user_id):
     return db_session.query(User).filter(User.id==user_id).first()
 
@@ -104,6 +109,9 @@ def get_tag(id):
 
 def get_tags():
     return db_session.query(Tag).order_by(Tag.id.desc()).all()
+
+def get_article_tags(article_id):
+    return db_session.query(Tag_Relation).filter(Tag_Relation.article_id==article_id).all()
 
 def get_category(id):
     return db_session.query(Category).filter(Category.id==id).first()

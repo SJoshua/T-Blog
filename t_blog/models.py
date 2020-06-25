@@ -44,7 +44,7 @@ class User(Base, UserMixin):
 class Category(Base):
     __tablename__ = 'tb_categories'
     id = Column(Integer, primary_key=True)
-    name = Column(String(50, collation='utf8mb4_unicode_ci'))
+    name = Column(String(50, collation='utf8mb4_unicode_ci'), unique=True)
     
     def __init__(self, id=None, name=None):
         self.id = id
@@ -56,7 +56,7 @@ class Category(Base):
 class Tag(Base):
     __tablename__ = 'tb_tags'
     id = Column(Integer, primary_key=True)
-    name = Column(String(50, collation='utf8mb4_unicode_ci'))
+    name = Column(String(50, collation='utf8mb4_unicode_ci'), unique=True)
 
     def __init__(self, name=None):
         self.name = name

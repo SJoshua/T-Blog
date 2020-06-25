@@ -39,7 +39,7 @@ def index():
 def show_article(article_id):
     article = get_article(article_id)
     comments = get_comments(article_id)
-
+    tags= get_article_tags(article_id)
     if not article:
         return render_template('404.html')
 
@@ -50,11 +50,15 @@ def show_article(article_id):
         # TODO: Add filter for content
         insert_comment(article_id=article_id, author=form.author.data, email=form.email.data, content=form.content.data, ip=request.remote_addr, approved=True)
 
-    arr = []
+    comments_arr = []
     for i in range(len(comments)):
-        arr.append((comments[i].id, comments[i].author, markdown(comments[i].content), comments[i].date))
+        comments_arr.append((comments[i].id, comments[i].author, markdown(comments[i].content), comments[i].date))
 
-    return render_template('article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category), comments=arr, form=form)
+    tags_arr = []
+    for i in range(len(tags)):
+        tags_arr.append((tags[i].id,tags[i].name))
+
+    return render_template('article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category), comments=comments_arr,tags=tags_arr,form=form)
 
 # for development
 @frontend.route('/init_db')

@@ -2,8 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms.fields import *
 from wtforms.widgets import *
 from wtforms.validators import *
-from .database import db_session, User, Category
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from .database import db_session, User, Category, Tag
+from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 
 class LoginForm(FlaskForm):
     username = StringField(u'Username', validators=[DataRequired(), Length(1, 60)])
@@ -30,13 +30,22 @@ class RegistrationForm(FlaskForm):
 class NewArticleForm(FlaskForm):
     title = StringField(u'Title', validators=[Required()])
     
-    def query_factory():
+    def query_category_factory():
         return [r.name for r in db_session.query(Category).all()]
 
-    def get_pk(obj):
+    def get_category_pk(obj):
         return obj
     
-    category = QuerySelectField(u'Category', validators=[Required()], query_factory=query_factory, get_pk=get_pk)
+    category = QuerySelectField(u'Category', validators=[Required()], query_factory=query_category_factory, get_pk=get_category_pk)
+    
+    def query_tag_factory():
+        return [r.name for r in db_session.query(Tag).all()]
+
+    def get_tag_pk(obj):
+        return obj
+    
+    tag = QuerySelectMultipleField(u'Tag', validators=[Required()], query_factory=query_tag_factory, get_pk=get_tag_pk)
+    
     content = TextAreaField(u'Article', render_kw={"rows": 20})
     submit = SubmitField(u'Publish')
 

@@ -2,7 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms.fields import *
 from wtforms.widgets import *
 from wtforms.validators import *
-from .database import db_session, User
+from .database import db_session, User, Category
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 class LoginForm(FlaskForm):
     username = StringField(u'Username', validators=[DataRequired(), Length(1, 60)])
@@ -28,6 +29,14 @@ class RegistrationForm(FlaskForm):
 
 class NewArticleForm(FlaskForm):
     title = StringField(u'Title', validators=[Required()])
+    
+    def query_factory():
+        return [r.name for r in db_session.query(Category).all()]
+
+    def get_pk(obj):
+        return obj
+    
+    category = QuerySelectField(u'Category', validators=[Required()], query_factory=query_factory, get_pk=get_pk)
     content = TextAreaField(u'Article', render_kw={"rows": 20})
     submit = SubmitField(u'Publish')
 

@@ -28,6 +28,8 @@ class RegistrationForm(FlaskForm):
 
 class NewArticleForm(FlaskForm):
     title = StringField(u'Title', validators=[Required()])
+    categories = [(r.name,r.name) for r in db_session.query(Category).all()]
+    category = SelectField(u'Category',validators = [validators.required()], choices = categories)
     content = TextAreaField(u'Article', render_kw={"rows": 20})
     submit = SubmitField(u'Publish')
 

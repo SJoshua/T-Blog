@@ -53,6 +53,9 @@ def drop_comment(comment_id=None):
     db_session.query(Comment).filter(Comment.id==comment_id).delete()
     db_session.commit()
 
+def drop_comments(article_id):
+    db_session.query(Comment).filter(Comment.article_id==article_id).delete()
+
 def insert_tag(name=None):
     new_tag = Tag(name=name)
     db_session.add(new_tag)

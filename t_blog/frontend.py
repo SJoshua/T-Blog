@@ -56,7 +56,8 @@ def show_article(article_id):
 
     tags_arr = []
     for i in range(len(tags)):
-        tags_arr.append((tags[i].id,tags[i].name))
+        tag = get_tag(tags[i].tag_id)
+        tags_arr.append((tag.id,tag.name))
 
     return render_template('article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category), comments=comments_arr,tags=tags_arr,form=form)
 
@@ -110,8 +111,9 @@ def new_article():
     form = NewArticleForm()
 
     if form.validate_on_submit():
-        insert_article(title=form.title.data, content=form.content.data, author=current_user.id, category=form.category.data.id)
-        
+        article_id = insert_article(title=form.title.data, content=form.content.data, author=current_user.id, category=form.category.data.id)
+        for i in range(len(form.tag.data)):
+            insert_tag_relation(article_id=article_id,tag_id=form.tag.data[i].id)
         return redirect(url_for('.index'))
 
     return render_template('new_article.html', form=form)
@@ -137,7 +139,9 @@ def edit_article(article_id):
 
     if form.validate_on_submit():
         update_article(article_id=article_id, title=form.title.data, content=form.content.data, category=form.category.data.id)
-        
+        drop_tag_relation(article_id)
+        for i in range(len(form.tag.data)):
+            insert_tag_relation(article_id,form.tag.data[i].id)
         return redirect(url_for('.index'))
 
     form.title.data = article.title

@@ -30,6 +30,7 @@ def insert_article(title=None, content=None, author=None, category=None):
     new_article = Article(title=title.encode('utf-8'), content=content.encode('utf-8'), author=author, category=category)
     db_session.add(new_article)
     db_session.commit()
+    return new_article.id
 
 def update_article(article_id=None, title=None, content=None, category=None):
     db_session.query(Article).filter(Article.id == article_id).update({"title": title, "content": content, "category": category})
@@ -83,6 +84,10 @@ def insert_tag_relation(article_id=None,tag_id=None):
     db_session.add(new_tag_relation)
     db_session.commit()
 
+def drop_tag_relation(article_id=None):
+    db_session.query(Tag_Relation).filter(Tag_Relation.article_id==article_id).delete()
+    db_session.commit()
+
 def get_user(user_id):
     return db_session.query(User).filter(User.id==user_id).first()
 
@@ -105,6 +110,9 @@ def get_category_name(id):
     return db_session.query(Category).filter(Category.id == id).first().name
 
 def get_tag(id):
+    return db_session.query(Tag).filter(Tag.id==id).first()
+
+def get_tag_name(id):
     return db_session.query(Tag).filter(Tag.id==id).first()
 
 def get_tags():

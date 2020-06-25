@@ -157,7 +157,7 @@ def delete_article(article_id):
 
     if not article:
         return render_template('404.html')
-    
+    drop_tag_relation(article_id)
     drop_article(article_id)
 
     return redirect(url_for('.index'))

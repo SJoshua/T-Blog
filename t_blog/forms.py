@@ -31,21 +31,18 @@ class NewArticleForm(FlaskForm):
     title = StringField(u'Title', validators=[Required()])
     
     def query_category_factory():
-        return [(r.id,r.name) for r in db_session.query(Category).all()]
-
-    def get_category_pk(Obj):
-        return Obj[1]
-    
-    category = QuerySelectField(u'Category', validators=[Required()], query_factory=query_category_factory, get_pk=get_category_pk)
-    
+        return [Category(r.id,r.name) for r in db_session.query(Category).all()]
     def query_tag_factory():
-        return [(r.id,r.name) for r in db_session.query(Tag).all()]
+        return [Tag(r.id,r.name) for r in db_session.query(Tag).all()]
+    
+    def get_pk(Obj):
+        return Obj.id
+    
+    def get_label(Obj):
+        return Obj.name
 
-    def get_tag_pk(Obj):
-        return Obj[1]
-    
-    tag = QuerySelectMultipleField(u'Tag', validators=[Required()], query_factory=query_tag_factory, get_pk=get_tag_pk)
-    
+    category = QuerySelectField(u'Category', validators=[Required()], query_factory=query_category_factory, get_pk=get_pk,get_label=get_label)
+    tag = QuerySelectMultipleField(u'Tag', validators=[Required()], query_factory=query_tag_factory, get_pk=get_pk,get_label=get_label)
     content = TextAreaField(u'Article', render_kw={"rows": 20})
     submit = SubmitField(u'Publish')
 

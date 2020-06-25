@@ -110,7 +110,7 @@ def new_article():
     form = NewArticleForm()
 
     if form.validate_on_submit():
-        insert_article(title=form.title.data, content=form.content.data, author=current_user.id, category=form.category.data[0])
+        insert_article(title=form.title.data, content=form.content.data, author=current_user.id, category=form.category.data.id)
         
         return redirect(url_for('.index'))
 
@@ -136,7 +136,7 @@ def edit_article(article_id):
     form = NewArticleForm()
 
     if form.validate_on_submit():
-        update_article(article_id=article_id, title=form.title.data, content=form.content.data, category=form.category.data[0])
+        update_article(article_id=article_id, title=form.title.data, content=form.content.data, category=form.category.data.id)
         
         return redirect(url_for('.index'))
 

@@ -1,0 +1,12 @@
+apps/
+node_modules/
+build/
+*.sublime-project
+*.sublime-workspace
+ISSUES.md
+/*.zip
+*custom.*
+*test.*
+dist/lib/kindeditor/plugins
+templates
+zui.templates.json

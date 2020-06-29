@@ -12,7 +12,7 @@ from .nav import nav
 frontend = Blueprint('frontend', __name__)
 
 nav.register_element('frontend_top', Navbar(
-    View('T-Blog', '.index'),
+   View('T-Blog', '.index'),
     View('Home', '.index'),
     Subgroup(
         'Admin',
@@ -25,6 +25,8 @@ nav.register_element('frontend_top', Navbar(
         View('Manage Categories','.manage_categories')
     ),
 ))
+
+
 
 @frontend.route('/')
 def index():

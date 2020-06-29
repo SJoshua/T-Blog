@@ -1,16 +1,57 @@
 {%- extends "base.html" %}
-
-{% block content %}
-    <div class="container">
-        <div class="jumbotron">
-            <h1>Welcome to T-Blog</h1>
-        </div>
-        {% for info in articles %}
-            <div class="jumbotron">
-                <h2><a href="/article/{{ info[0] }}"> {{ info[1] }} </a></h2>
-                <p><b>@{{ info[2] }}</b> at <i>{{ info[3] }}</i></p>
-            </div>
-        {% endfor %}
-    </div> 
-{%- endblock %}
  
+{% block title %} T-Blog {% endblock %}
+  
+{% block head %}
+{{super()}}
+{%- endblock %}
+
+{% block styles -%}
+    {{super()}} 
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='index.css')}}" />
+	<link rel="stylesheet" type="text/css" href="../static/font-awesome-4.7.0/css/font-awesome.css"/>
+	<link rel="shortcut icon" type="images/x-icon" href="../static/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="../static/zui-1.9.1/dist/css/zui.css"/>
+{% endblock %}
+ 
+{% block navbar %}
+	<!--顶部导航-->
+	<div class="d1">
+		<div class="container-navbar">
+			<div class="T-icon">
+				<a href="../index.html" target="_self">
+					<img src="../static/images/logo.png" alt="T-blog" title="T-blog" height="56px" />
+				</a>		
+			</div>
+			
+			{{nav.frontend_top.render()}}
+			<div class="other-navbar">
+				<a href="../help.html" target="_self">
+					<i class="fa fa-book"></i> &nbsp; Help
+				</a>
+			</div>
+			
+			<div class="searchbar">
+				<div class="search">
+					<div class="search-content">
+						<input type="text" placeholder="search" value="" />
+					</div>				
+					<div class="search-icon">
+						<i class="fa fa-search"></i> &nbsp;
+					</div>
+				</div>
+				<div class="other-searchbar">
+					<div class="switch">
+					  <input type="checkbox">
+					  <label>夜间模式</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

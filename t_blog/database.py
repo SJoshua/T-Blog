@@ -144,6 +144,9 @@ def verify_password(username=None, password=None):
     if user and check_password_hash(user.password, password):
         return user
 
+def search_articles(keyword):
+    return db_session.query(Article).filter(Article.content.like('%%%s%%' % keyword)).all()
+
 # callback function for flask-login extension
 @login_manager.user_loader
 def load_user(user_id):

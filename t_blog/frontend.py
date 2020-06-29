@@ -22,7 +22,8 @@ nav.register_element('frontend_top', Navbar(
         View('New Tag','.new_tag'),
         View('Manage Tags','.manage_tags'),
         View('New Category','.new_category'),
-        View('Manage Categories','.manage_categories')
+        View('Manage Categories','.manage_categories'),
+        View('Search Article','.search_article')
     ),
 ))
 
@@ -62,6 +63,20 @@ def show_article(article_id):
         tags_arr.append((tag.id,tag.name))
 
     return render_template('article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category), comments=comments_arr,tags=tags_arr,form=form)
+
+@frontend.route('/search', methods=('GET', 'POST'))
+def search_article():
+    form = NewSearchForm()
+
+    if form.validate_on_submit():
+        articles = search_articles(form.key_word.data)
+        arr = []
+        for i in range(len(articles)):
+            user = get_user(articles[i].author)
+            arr.append((articles[i].id, articles[i].title,user.username,articles[i].date)) 
+        return render_template('index.html',articles=arr)
+    
+    return render_template('search.html',form=form)
 
 # for development
 @frontend.route('/init_db')

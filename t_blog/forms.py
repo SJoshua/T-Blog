@@ -59,3 +59,7 @@ class NewTagForm(FlaskForm):
 class NewCategoryForm(FlaskForm):
     name = StringField(u'name', validators=[Required()])
     submit = SubmitField(u'Submit')
+
+class NewSearchForm(FlaskForm):
+    key_word = StringField(u'key word',validators=[Required()])
+    search = SubmitField(u'Search')

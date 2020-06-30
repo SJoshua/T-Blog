@@ -29,14 +29,25 @@ nav.register_element('frontend_top', Navbar(
 
 
 
-@frontend.route('/')
+@frontend.route('/', methods=('GET', 'POST'))
 def index():
     articles = get_articles()
     arr = []
+    
+    form = NewSearchForm()
+
+    if form.validate_on_submit():
+        articles = search_articles(form.key_word.data)
+        arr = []
+        for i in range(len(articles)):
+            user = get_user(articles[i].author)
+            arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content)) 
+        return render_template('index.html',articles=arr , form = form)
+
     for i in range(len(articles)):
         user = get_user(articles[i].author)
-        arr.append((articles[i].id, articles[i].title,user.username,articles[i].date))
-    return render_template('index.html', articles=arr)
+        arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
+    return render_template('index.html', articles=arr, form = form)
 
 @frontend.route('/article/<int:article_id>', methods=('GET', 'POST'))
 def show_article(article_id):

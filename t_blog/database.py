@@ -152,7 +152,8 @@ def search_tag(keyword):
     return  db_session.query(Tag_Relation).filter(Tag_Relation.tag_id==tag.id).all()
 
 def search_category(keyword):
-    return db_session.query(Article).filter(get_category_name(Article.category)==keyword).all()
+    category = db_session.query(Category).filter(Category.name==keyword).first()
+    return db_session.query(Article).filter(Article.category == category.id).all()
 
 # callback function for flask-login extension
 @login_manager.user_loader

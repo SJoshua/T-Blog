@@ -14,16 +14,16 @@ frontend = Blueprint('frontend', __name__)
 nav.register_element('frontend_top', Navbar(
    View('T-Blog', '.index'),
     View('Home', '.index'),
+    View('Site Settings', '.site_settings'),
+    View('Search Article','.search_article'),
     Subgroup(
         'Admin',
         View('New Article', '.new_article'),
         View('Manage Articles', '.manage_articles'),
-        View('Site Settings', '.site_settings'),
         View('New Tag','.new_tag'),
         View('Manage Tags','.manage_tags'),
         View('New Category','.new_category'),
-        View('Manage Categories','.manage_categories'),
-        View('Search Article','.search_article')
+        View('Manage Categories','.manage_categories')
     ),
 ))
 

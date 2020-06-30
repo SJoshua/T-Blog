@@ -145,7 +145,7 @@ def verify_password(username=None, password=None):
         return user
 
 def search_articles(keyword):
-    return db_session.query(Article).filter(Article.content.like('%%%s%%' % keyword)).all()
+    return db_session.query(Article).filter((Article.content.like('%%%s%%' % keyword)) | (Article.title.like('%%%s%%' % keyword))).all()
 
 def search_tag(keyword):
     tag = db_session.query(Tag).filter(Tag.name==keyword).first()

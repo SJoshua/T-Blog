@@ -216,11 +216,12 @@ body {
 	font-size: 15px;
 	font-weight: bold;
 	height: 130px;
+	line-height: 32px;
 	margin-top: 10px;
 	overflow: hidden;
 	text-overflow:ellipsis;
 	display: -webkit-box;
-	-webkit-line-clamp:3;
+	-webkit-line-clamp:4;
 	-webkit-box-orient: vertical;
 }
 .meta {

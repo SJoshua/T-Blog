@@ -147,6 +147,13 @@ def verify_password(username=None, password=None):
 def search_articles(keyword):
     return db_session.query(Article).filter(Article.content.like('%%%s%%' % keyword)).all()
 
+def search_tag(keyword):
+    tag = db_session.query(Tag).filter(Tag.name==keyword).first()
+    return  db_session.query(Tag_Relation).filter(Tag_Relation.tag_id==tag.id).all()
+
+def search_category(keyword):
+    return db_session.query(Article).filter(get_category_name(Article.category)==keyword).all()
+
 # callback function for flask-login extension
 @login_manager.user_loader
 def load_user(user_id):

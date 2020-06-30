@@ -37,11 +37,25 @@ def index():
     form = NewSearchForm()
 
     if form.validate_on_submit():
-        articles = search_articles(form.key_word.data)
         arr = []
-        for i in range(len(articles)):
-            user = get_user(articles[i].author)
-            arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content)) 
+        if form.Type.data == 1:
+            articles = search_articles(form.key_word.data)
+            for i in range(len(articles)):
+                user = get_user(articles[i].author)
+                arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
+        else:
+            if form.Type.data == 2:
+                articles = search_tag(form.key_word.data)
+                for i in range(len(articles)):
+                    article = get_article(articles[i].article_id)
+                    user = get_user(article.author)
+                    arr.append((article.id, article.title,user.username,article.date,article.content)) 
+            else:
+                articles = search_category(form.key_word.data)
+                for i in range(len(articles)):
+                    user = get_user(articles[i].author)
+                    arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
+         
         return render_template('index.html',articles=arr , form = form)
 
     for i in range(len(articles)):

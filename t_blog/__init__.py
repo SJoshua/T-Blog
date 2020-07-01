@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap, WebCDN
 
 from .database import db_session, init_db
 
@@ -15,6 +15,7 @@ def create_app():
     app.config.update(SECRET_KEY="devkey")
 
     Bootstrap(app)
+    app.extensions['bootstrap']['cdns']['bootstrap'] = WebCDN('https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.3.7/')
 
     nav.init_app(app)
     login_manager.init_app(app)

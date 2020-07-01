@@ -5,6 +5,7 @@ body {
 	height:56px;
 	background-color: #fafafa;
 	position: fixed; 
+	z-index: 150;
 	left: 0px;
 	top: 0px;
 	width: 100%;
@@ -44,7 +45,7 @@ body {
 	font-weight: bold;
 }
 .navbar-default .navbar-nav>li>a {
-    color: #333;
+    color: #000;
     font-size: 20px;
     font-family: Arial;
     font-weight: 500;
@@ -136,19 +137,18 @@ body {
 .row {
 	background-color: rgb(255,255,255);
 	margin: auto;
-
 	padding-top: 20px;
-	width:960px;
+	width:1100px;
 	
 }
 .left-side {
 	float: left;
-	width: 640px;
+	width: 740px;
 }
 .right-side {
 	background-color: azure;
 	float: right;
-	width: 280px;
+	width: 320px;
 	height: 500px;
 }
 .welcome {
@@ -171,7 +171,7 @@ body {
 }
 .write {
 	background-color: rgb(244,244,244);
-	width: 640px;
+	width: 740px;
 }
 .container-index {
 /*	margin-top: 20px;*/
@@ -221,6 +221,7 @@ body {
 	overflow: hidden;
 	text-overflow:ellipsis;
 	display: -webkit-box;
+	-webkit-line-clamp:3;
 	-webkit-line-clamp:4;
 	-webkit-box-orient: vertical;
 }
@@ -230,6 +231,32 @@ body {
 }
 hr {
 	color: red;
+}
+.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {
+    display: block;
+    max-width: 100%;
+    /* height: auto; */
+    height: 300px;
+}
+.carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    z-index: 15;
+    width: 144px;
+    height: 40px;
+    padding-bottom: 0px;
+    padding-left: 0;
+    margin-left: -80px;
+    /* margin-bottom: 10px; */
+    text-align: center;
+    list-style: none;
+}
+.carousel-caption > p {
+	height: 20px;
+}
+.carousel-caption > h3 {
+	height: 200px;
 }
 .jumbotron {
     margin-top: 1em; 

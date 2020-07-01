@@ -16,7 +16,8 @@ def create_app():
 
     Bootstrap(app)
     app.extensions['bootstrap']['cdns']['bootstrap'] = WebCDN('https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.3.7/')
-
+    app.extensions['bootstrap']['cdns']['jquery'] = WebCDN('https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/')
+    
     nav.init_app(app)
     login_manager.init_app(app)
     app.register_blueprint(frontend)

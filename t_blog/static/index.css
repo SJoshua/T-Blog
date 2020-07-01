@@ -151,6 +151,9 @@ body {
 	width: 320px;
 	height: 500px;
 }
+.side-search {
+	background-color: rgb(45,56,125);
+}
 .welcome {
 	background-color: rgb(74,213,255);
 	color: #8A2BE2;
@@ -204,6 +207,11 @@ body {
 .title {
 	height: 20px;
 }
+.title>h2 {
+	margin-top: 5px;
+	font-size: 25px;
+	color: #e56244;
+}
 .title>a {
 	color: rgb(23,162,184);
 	font-family: Times New Roman;
@@ -214,20 +222,24 @@ body {
 .abstract {
 	color: black;
 	font-size: 15px;
-	font-weight: bold;
-	height: 130px;
-	line-height: 32px;
-	margin-top: 10px;
+	font-family:微软雅黑,宋体, Verdana;
+	width: 540px;
+	height: 100px;
+	word-break: break-all;
+	word-wrap: break-word;
+	line-height: 25px;
+	margin-top: 20px;
 	overflow: hidden;
 	text-overflow:ellipsis;
 	display: -webkit-box;
-	-webkit-line-clamp:3;
+	-webkit-line-clamp:4;
 	-webkit-line-clamp:4;
 	-webkit-box-orient: vertical;
 }
 .meta {
 	height: 20px;
-	line-height: 0px;
+	line-height: 20px;
+	margin-top: 20px;
 }
 hr {
 	color: red;
@@ -257,6 +269,45 @@ hr {
 }
 .carousel-caption > h3 {
 	height: 200px;
+}
+
+/*h3blog*/
+@media (min-width: 768px)
+.mb-md-3, .my-md-3 {
+    margin-bottom: 1rem!important;
+}
+.pl-3, .px-3 {
+    padding-left: 1rem!important;
+}
+.pr-3, .px-3 {
+    padding-right: 1rem!important;
+}
+.rounded-0 {
+    border-radius: 0!important;
+}
+.border-0 {
+    border: 0!important;
+}
+.card {
+    position: relative;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border-radius: .25rem;
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+	    font-size: 1rem;
+	    font-weight: 400;
+	    line-height: 1.5;
+	    color: #212529;
+	    text-align: left;
+	    background-color: #fff;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
 }
 .jumbotron {
     margin-top: 1em; 

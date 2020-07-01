@@ -32,10 +32,6 @@
 				</a>
 			</div>
 			
-			<div class="jumbotron">
-							{{wtf.quick_form(form, novalidate=True)}}
-			</div>   
-			
 			<div class="searchbar">
 				<div class="search">
 					<div class="search-content">
@@ -133,6 +129,49 @@
 				</div>
 				
 				<div class="right-side">
+					<div class="side-search">
+						{{wtf.quick_form(form, novalidate=True)}}
+					</div>   
+					<!--最新文章-->
+					<div class="card border-0 rounded-0 px-3 mb-2 mb-md-3" id="tag-card">
+					    <div class="card-header bg-white px-0">
+					        <strong><i class="fa fa-book mr-2 f-17"></i>最新文章</strong>
+					    </div>
+					    <ul class="list-group list-group-flush f-16">
+					        
+					        <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+					            <a class="category-item" href="/article/python-ffprobe/"
+					               title="使用ffprobe分析视频，python代码调用ffprobe获取视频信息">使用ffprobe分析视频，python代码调用f...</a>
+					            <span class="badge text-center"></span>
+					        </li>
+					        <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+					            <a class="category-item" href="/article/python-ffprobe/"
+					               title="使用ffprobe分析视频，python代码调用ffprobe获取视频信息">使用ffprobe分析视频，python代码调用f...</a>
+					            <span class="badge text-center"></span>
+					        </li>       
+					    </ul>
+					</div>
+					<!--文章分类-->
+					<div class="card border-0 rounded-0 px-3 mb-2 mb-md-3" id="category-card">
+					    <div class="card-header bg-white px-0">
+					        <strong><i class="fa fa-book mr-2 f-17"></i>文章分类</strong>
+					    </div>
+					    
+					    <ul class="list-group list-group-flush f-16">
+					        
+					        <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+					            <a class="category-item" href="/category/python-syr/"
+					               title="查看【python手艺人】分类下所有文章">python手艺人</a>
+					            <span class="badge text-center">31</span>
+					        </li>
+					        
+					        <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+					            <a class="category-item" href="/category/python-crawler/"
+					               title="查看【python爬虫】分类下所有文章">python爬虫</a>
+					            <span class="badge text-center">21</span>
+					        </li>			        
+					    </ul>
+					</div>
 					
 				</div>
 				

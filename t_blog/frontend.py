@@ -267,10 +267,10 @@ def delete_comment(comment_id):
 @frontend.route('/admin/site_settings', methods=('GET', 'POST'))
 @login_required
 def site_settings():
-    form = NewSettingForm()
+    form = NewSettingForm(theme=current_theme().value)
 
     if form.validate_on_submit():
-        set_theme(form.Theme.data.value)
+        set_theme(form.theme.data)
 
         return redirect(url_for('.index'))
 

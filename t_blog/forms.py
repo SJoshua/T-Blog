@@ -5,6 +5,8 @@ from wtforms.validators import *
 from .database import db_session, User, Category, Tag, Setting
 from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 
+import os
+
 class LoginForm(FlaskForm):
     username = StringField(u'Username', validators=[DataRequired(), Length(1, 60)])
     password = PasswordField(u'Password', validators=[DataRequired()])
@@ -32,6 +34,7 @@ class NewArticleForm(FlaskForm):
     
     def query_category_factory():
         return [Category(r.id,r.name) for r in db_session.query(Category).all()]
+
     def query_tag_factory():
         return [Tag(r.id,r.name) for r in db_session.query(Tag).all()]
     
@@ -66,8 +69,13 @@ class NewSearchForm(FlaskForm):
     search = SubmitField(u'Search')
 
 class NewSettingForm(FlaskForm):
-    def query_factory():
-        return [Setting(r.id,r.key,r.value) for r in db_session.query(Setting).filter(Setting.key == 'theme')]
+    def get_themes():
+        it = os.walk('./t_blog/templates')
+        themes = []
+        for path, dir_list, file_list in it:
+            for theme_name in dir_list:
+                themes.append((theme_name, theme_name))
+        return themes
     
     def get_pk(Obj):
         return Obj.id
@@ -75,5 +83,6 @@ class NewSettingForm(FlaskForm):
     def get_label(Obj):
         return Obj.value
 
-    Theme = QuerySelectField(u'Theme',validators=[Required()],query_factory=query_factory,get_pk=get_pk,get_label=get_label)
+    # Theme = QuerySelectField(u'Theme',validators=[Required()],query_factory=query_factory,get_pk=get_pk,get_label=get_label)
+    theme = SelectField('Theme', choices=get_themes())
     submit = SubmitField(u'Submit')

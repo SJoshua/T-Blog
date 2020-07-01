@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms.fields import *
 from wtforms.widgets import *
 from wtforms.validators import *
-from .database import db_session, User, Category, Tag
+from .database import db_session, User, Category, Tag, Setting
 from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 
 class LoginForm(FlaskForm):
@@ -64,3 +64,16 @@ class NewSearchForm(FlaskForm):
     Type = SelectField(u'Type',coerce = int,validators=[Required()],choices=[(1,'Content'),(2,'Tag'),(3,'Category')])
     key_word = StringField(u'key word',validators=[Required()])
     search = SubmitField(u'Search')
+
+class NewSettingForm(FlaskForm):
+    def query_factory():
+        return [Setting(r.id,r.key,r.value) for r in db_session.query(Setting).filter(Setting.key == 'theme')]
+    
+    def get_pk(Obj):
+        return Obj.id
+
+    def get_label(Obj):
+        return Obj.value
+
+    Theme = QuerySelectField(u'Theme',validators=[Required()],query_factory=query_factory,get_pk=get_pk,get_label=get_label)
+    submit = SubmitField(u'Submit')

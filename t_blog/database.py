@@ -10,6 +10,8 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 Base = declarative_base()
 Base.query = db_session.query_property()
 
+
+
 from t_blog.models import *
 
 def init_db():
@@ -20,6 +22,11 @@ def init_db():
     Category.query.delete()
     new_admin = User(username='admin', password='admin', nickname='admin', email='admin@t_blog.com')
     default_category = Category(id=1, name='Uncategorized')
+    default_theme1 = Setting(id = 1, key='current',value='modern')
+    default_theme2 = Setting(id = 2, key='theme', value='classic')
+    default_theme3 = Setting(id = 3, key='theme', value='modern')
+    db_session.add(default_theme1)
+    db_session.add(default_theme2)
     db_session.add(new_admin)
     db_session.add(default_category)
     db_session.commit()
@@ -155,6 +162,13 @@ def search_category(keyword):
     category = db_session.query(Category).filter(Category.name==keyword).first()
     return db_session.query(Article).filter(Article.category == category.id).all()
 
+def current_theme():
+    return db_session.query(Setting).filter(Setting.key == 'current').first()
+
+def set_theme(value=None):
+    db_session.query(Setting).filter(Setting.key == 'current').update({"value":value})
+    db_session.commit()
+ 
 # callback function for flask-login extension
 @login_manager.user_loader
 def load_user(user_id):

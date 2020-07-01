@@ -57,20 +57,21 @@ def index():
                         user = get_user(articles[i].author)
                         arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
          
-        return render_template('index.html',articles=arr , form = form)
+        return render_template(current_theme().value + '/index.html',articles=arr , form = form)
 
     for i in range(len(articles)):
         user = get_user(articles[i].author)
         arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
-    return render_template('index.html', articles=arr, form = form)
+    return render_template(current_theme().value + '/index.html', articles=arr, form = form)
 
 @frontend.route('/article/<int:article_id>', methods=('GET', 'POST'))
 def show_article(article_id):
     article = get_article(article_id)
     comments = get_comments(article_id)
     tags= get_article_tags(article_id)
+
     if not article:
-        return render_template('404.html')
+        return render_template(current_theme().value + '/404.html')
 
     form = NewCommentForm()
 
@@ -88,7 +89,7 @@ def show_article(article_id):
         tag = get_tag(tags[i].tag_id)
         tags_arr.append((tag.id,tag.name))
 
-    return render_template('article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category), comments=comments_arr,tags=tags_arr,form=form)
+    return render_template(current_theme().value + '/article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category), comments=comments_arr,tags=tags_arr,form=form)
 
 @frontend.route('/search', methods=('GET', 'POST'))
 def search_article():
@@ -115,9 +116,9 @@ def search_article():
                         user = get_user(articles[i].author)
                         arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
          
-        return render_template('index.html',articles=arr , form = form)
+        return render_template(current_theme().value + '/index.html',articles=arr , form = form)
     
-    return render_template('search.html',form=form)
+    return render_template(current_theme().value + '/search.html',form=form)
 
 # for development
 @frontend.route('/init_db')
@@ -139,7 +140,7 @@ def login():
     if form.errors:
         flash(u'Failed. Please try again.', 'danger')
 
-    return render_template('login.html', form=form)
+    return render_template(current_theme().value + '/login.html', form=form)
 
 @frontend.route('/register', methods=['GET', 'POST'])
 def register():
@@ -153,7 +154,7 @@ def register():
         db_session.commit()
         flash('Registration Succeed!')
         return redirect(url_for('frontend.login'))
-    return render_template('register.html', form=form)
+    return render_template(current_theme().value + '/register.html', form=form)
 
 
 @frontend.route('/logout')
@@ -174,7 +175,7 @@ def new_article():
             insert_tag_relation(article_id=article_id,tag_id=form.tag.data[i].id)
         return redirect(url_for('.index'))
 
-    return render_template('new_article.html', form=form)
+    return render_template(current_theme().value + '/new_article.html', form=form)
 
 @frontend.route('/admin/manage_articles', methods=('GET', 'POST'))
 @login_required
@@ -183,7 +184,7 @@ def manage_articles():
     arr = []
     for i in range(len(articles)):
         arr.append((articles[i].id, articles[i].title))
-    return render_template('manage_articles.html', articles=arr)
+    return render_template(current_theme().value + '/manage_articles.html', articles=arr)
 
 @frontend.route('/admin/edit_article/<int:article_id>', methods=('GET', 'POST'))
 @login_required
@@ -191,7 +192,7 @@ def edit_article(article_id):
     article = get_article(article_id)
 
     if not article:
-        return render_template('404.html')
+        return render_template(current_theme().value + '/404.html')
 
     form = NewArticleForm()
 
@@ -205,7 +206,7 @@ def edit_article(article_id):
     form.title.data = article.title
     form.content.data = article.content
 
-    return render_template('edit_article.html', form=form)
+    return render_template(current_theme().value + '/edit_article.html', form=form)
 
 @frontend.route('/admin/delete_article/<int:article_id>', methods=('GET', 'POST'))
 @login_required
@@ -214,7 +215,7 @@ def delete_article(article_id):
     article = get_article(article_id)
 
     if not article:
-        return render_template('404.html')
+        return render_template(current_theme().value + '/404.html')
     drop_tag_relation(article_id)
     drop_comments(article_id)
     drop_article(article_id)
@@ -228,7 +229,7 @@ def manage_comments(article_id):
     arr = []
     for i in range(len(comments)):
         arr.append((comments[i].id, comments[i].author,comments[i].email, markdown(comments[i].content), comments[i].date,comments[i].ip,comments[i].approved))
-    return render_template('manage_comments.html', comments=arr)
+    return render_template(current_theme().value + '/manage_comments.html', comments=arr)
 
 @frontend.route('/admin/edit_comment/<int:comment_id>', methods=('GET', 'POST'))
 @login_required
@@ -236,7 +237,7 @@ def edit_comment(comment_id):
     comment = get_comment(comment_id)
     
     if not comment:
-        return render_template('404.html')
+        return render_template(current_theme().value + '/404.html')
     
     form = NewCommentForm()
     
@@ -257,7 +258,7 @@ def delete_comment(comment_id):
     comment = get_comment(comment_id)
 
     if not comment:
-        return render_template('404.html')
+        return render_template(current_theme().value + '/404.html')
     
     drop_comment(comment_id)
 
@@ -266,7 +267,14 @@ def delete_comment(comment_id):
 @frontend.route('/admin/site_settings', methods=('GET', 'POST'))
 @login_required
 def site_settings():
-    return "Building ..."
+    form = NewSettingForm()
+
+    if form.validate_on_submit():
+        set_theme(form.Theme.data.value)
+
+        return redirect(url_for('.index'))
+
+    return render_template(current_theme().value + '/setting.html',form=form)
 
 @frontend.route('/admin/new_tag', methods=('GET', 'POST'))
 @login_required
@@ -278,7 +286,7 @@ def new_tag():
         
         return redirect(url_for('.index'))
 
-    return render_template('new_tag.html', form=form)
+    return render_template(current_theme().value + '/new_tag.html', form=form)
 
 @frontend.route('/admin/manage_tags', methods=('GET', 'POST'))
 @login_required
@@ -287,7 +295,7 @@ def manage_tags():
     arr = []
     for i in range(len(tags)):
         arr.append((tags[i].id, tags[i].name))
-    return render_template('manage_tags.html', tags=arr)
+    return render_template(current_theme().value + '/manage_tags.html', tags=arr)
 
 @frontend.route('/admin/edit_tag/<int:tag_id>', methods=('GET', 'POST'))
 @login_required
@@ -295,7 +303,7 @@ def edit_tag(tag_id):
     tag = get_tag(tag_id)
 
     if not tag:
-        return render_template('404.html')
+        return render_template(current_theme().value + '/404.html')
 
     form = NewTagForm()
 
@@ -306,7 +314,7 @@ def edit_tag(tag_id):
 
     form.name=tag.name
 
-    return render_template('edit_tag.html', form=form)
+    return render_template(current_theme().value + '/edit_tag.html', form=form)
 
 @frontend.route('/admin/delete_tag/<int:tag_id>', methods=('GET', 'POST'))
 @login_required
@@ -315,7 +323,7 @@ def delete_tag(tag_id):
     tag = get_tag(tag_id)
 
     if not tag:
-        return render_template('404.html')
+        return render_template(current_theme().value + '/404.html')
     
     drop_tag(tag_id)
 
@@ -331,7 +339,7 @@ def new_category():
         
         return redirect(url_for('.index'))
 
-    return render_template('new_category.html', form=form)
+    return render_template(current_theme().value + '/new_category.html', form=form)
 
 @frontend.route('/admin/manage_categories', methods=('GET', 'POST'))
 @login_required
@@ -340,7 +348,7 @@ def manage_categories():
     arr = []
     for i in range(len(categories)):
         arr.append((categories[i].id, categories[i].name))
-    return render_template('manage_categories.html', categories=arr)
+    return render_template(current_theme().value + '/manage_categories.html', categories=arr)
 
 @frontend.route('/admin/edit_category/<int:category_id>', methods=('GET', 'POST'))
 @login_required
@@ -348,7 +356,7 @@ def edit_category(category_id):
     category = get_category(category_id)
 
     if not category:
-        return render_template('404.html')
+        return render_template(current_theme().value + '/404.html')
 
     form = NewCategoryForm()
 
@@ -359,7 +367,7 @@ def edit_category(category_id):
 
     form.name=category.name
 
-    return render_template('edit_category.html', form=form)
+    return render_template(current_theme().value + '/edit_category.html', form=form)
 
 @frontend.route('/admin/delete_category/<int:category_id>', methods=('GET', 'POST'))
 @login_required
@@ -368,7 +376,7 @@ def delete_category(category_id):
     category = get_category(category_id)
 
     if not category:
-        return render_template('404.html')
+        return render_template(current_theme().value + '/404.html')
     
     drop_category(category_id)
 

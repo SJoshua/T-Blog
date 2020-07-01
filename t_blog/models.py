@@ -107,10 +107,11 @@ class Setting(Base):
     key = Column(String(50, collation='utf8mb4_unicode_ci'))
     value = Column(Text(collation='utf8mb4_unicode_ci'))
 
-    def __init__(self,key=None,value=None):
-        self.key=key
-        self.value=value
-
+    def __init__(self,id = None, key=None, value=None):
+        self.id = id
+        self.key = key
+        self.value = value
+ 
     def __repr__(self):
         return '<Setting %r>' % (self.id)
 

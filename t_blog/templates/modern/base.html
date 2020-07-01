@@ -8,10 +8,10 @@
 
 {% block styles -%}
     {{super()}} 
+	<link rel="shortcut icon" type="images/x-icon" href="/static/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/fontawesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/zui/1.9.1/css/zui.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='index.css')}}" />
-	<link rel="stylesheet" type="text/css" href="../static/font-awesome-4.7.0/css/font-awesome.css"/>
-	<link rel="shortcut icon" type="images/x-icon" href="../static/favicon.ico">
-	<link rel="stylesheet" type="text/css" href="../static/zui-1.9.1/dist/css/zui.css"/>
 {% endblock %}
 
 {% block navbar %}
@@ -19,14 +19,15 @@
 	<div class="d1">
 		<div class="container-navbar">
 			<div class="T-icon">
-				<a href="../index.html" target="_self">
-					<img src="../static/images/logo.png" alt="T-blog" title="T-blog" height="56px" />
+				<a href="/index.html" target="_self">
+					<img src="/static/images/logo.png" alt="T-blog" title="T-blog" height="56px" />
 				</a>		
 			</div>
 			
 			{{nav.frontend_top.render()}}
+
 			<div class="other-navbar">
-				<a href="../help.html" target="_self">
+				<a href="/help.html" target="_self">
 					<i class="fa fa-book"></i> &nbsp; Help
 				</a>
 			</div>

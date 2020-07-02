@@ -16,18 +16,19 @@ from t_blog.models import *
 
 def init_db():
     Base.metadata.create_all(bind=engine)
+    Tag_Relation.query.delete()
     Comment.query.delete()
     Article.query.delete()
     User.query.delete()
     Category.query.delete()
     new_admin = User(username='admin', password='admin', nickname='admin', email='admin@t_blog.com')
     default_category = Category(id=1, name='Uncategorized')
-    default_theme = Setting(id=1, key='current', value='modern')
-    default_address = Setting(id=2, key='address', value='http://localhost/')
+    current_theme = Setting(key='current_theme', value='modern')
+    site_url = Setting(key='site_url', value='http://localhost/')
     db_session.add(new_admin)
     db_session.add(default_category)
-    db_session.add(default_theme)
-    db_session.add(default_address)
+    db_session.add(current_theme)
+    db_session.add(site_url)
     db_session.commit()
 
 def insert_article(title=None, content=None, author=None, category=None):
@@ -154,18 +155,18 @@ def search_category(keyword):
     category = db_session.query(Category).filter(Category.name==keyword).first()
     return db_session.query(Article).filter(Article.category == category.id).all()
 
-def current_theme():
-    return db_session.query(Setting).filter(Setting.key == 'current').first()
+def get_current_theme():
+    return db_session.query(Setting).filter(Setting.key == 'current_theme').first()
 
-def set_theme(value=None):
-    db_session.query(Setting).filter(Setting.key == 'current').update({"value":value})
+def set_current_theme(value=None):
+    db_session.query(Setting).filter(Setting.key == 'current_theme').update({"value":value})
     db_session.commit()
 
-def current_address():
-    return db_session.query(Setting).filter(Setting.key == 'address').first()
+def get_site_url():
+    return db_session.query(Setting).filter(Setting.key == 'site_url').first()
 
-def set_address(value=None):
-    db_session.query(Setting).filter(Setting.key == 'address').update({"value":value})
+def set_site_url(value=None):
+    db_session.query(Setting).filter(Setting.key == 'site_url').update({"value":value})
     db_session.commit()
 
 # callback function for flask-login extension

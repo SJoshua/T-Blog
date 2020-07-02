@@ -85,7 +85,7 @@ def show_article(article_id):
     for i in range(len(comments)):
         comments_arr.append((comments[i].id, comments[i].author, markdown(comments[i].content), comments[i].date))
 
-    tags_arr = []
+        tags_arr = []
     for i in range(len(tags)):
         tag = get_tag(tags[i].tag_id)
         tags_arr.append((tag.id,tag.name))
@@ -143,7 +143,8 @@ def login():
 
     return render_template(get_current_theme().value + '/login.html', form=form)
 
-@frontend.route('/register', methods=['GET', 'POST'])
+@frontend.route('/admin/register', methods=['GET', 'POST'])
+@login_required
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -273,7 +274,7 @@ def delete_comment(comment_id):
 @frontend.route('/admin/site_settings', methods=('GET', 'POST'))
 @login_required
 def site_settings():
-    form = NewSettingForm(theme=get_get_current_theme().value,address=get_site_url().value)
+    form = NewSettingForm(theme=get_current_theme().value,address=get_site_url().value)
 
     if form.validate_on_submit():
         set_current_theme(form.theme.data)

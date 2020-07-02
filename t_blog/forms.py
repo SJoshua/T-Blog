@@ -84,5 +84,6 @@ class NewSettingForm(FlaskForm):
         return Obj.value
 
     # Theme = QuerySelectField(u'Theme',validators=[Required()],query_factory=query_factory,get_pk=get_pk,get_label=get_label)
-    theme = SelectField('Theme', choices=get_themes())
+    theme = SelectField(u'Theme', choices=get_themes())
+    address = StringField(u'Address',validators=[Required()]) 
     submit = SubmitField(u'Submit')

@@ -23,9 +23,11 @@ def init_db():
     new_admin = User(username='admin', password='admin', nickname='admin', email='admin@t_blog.com')
     default_category = Category(id=1, name='Uncategorized')
     default_theme = Setting(id=1, key='current', value='modern')
+    default_address = Setting(id=2, key='address', value='http://localhost/')
     db_session.add(new_admin)
     db_session.add(default_category)
     db_session.add(default_theme)
+    db_session.add(default_address)
     db_session.commit()
 
 def insert_article(title=None, content=None, author=None, category=None):
@@ -108,16 +110,10 @@ def get_article(id):
 def get_articles():
     return db_session.query(Article).order_by(Article.id.desc()).all()
 
-def get_author_name(id):
-    return db_session.query(User).filter(User.id == id).first().nickname
-
-def get_category_name(id):
-    return db_session.query(Category).filter(Category.id == id).first().name
+def get_category(id):
+    return db_session.query(Category).filter(Category.id == id).first()
 
 def get_tag(id):
-    return db_session.query(Tag).filter(Tag.id==id).first()
-
-def get_tag_name(id):
     return db_session.query(Tag).filter(Tag.id==id).first()
 
 def get_tags():
@@ -131,6 +127,7 @@ def get_category(id):
 
 def get_categories():
     return db_session.query(Category).order_by(Category.id.desc()).all()
+
 def get_setting_value(key):
     return db_session.query(Setting).filter(Setting.key == key).first().value
 
@@ -163,7 +160,14 @@ def current_theme():
 def set_theme(value=None):
     db_session.query(Setting).filter(Setting.key == 'current').update({"value":value})
     db_session.commit()
- 
+
+def current_address():
+    return db_session.query(Setting).filter(Setting.key == 'address').first()
+
+def set_address(value=None):
+    db_session.query(Setting).filter(Setting.key == 'address').update({"value":value})
+    db_session.commit()
+
 # callback function for flask-login extension
 @login_manager.user_loader
 def load_user(user_id):

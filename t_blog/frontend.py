@@ -90,7 +90,7 @@ def show_article(article_id):
         tag = get_tag(tags[i].tag_id)
         tags_arr.append((tag.id,tag.name))
 
-    return render_template(current_theme().value + '/article.html', title=article.title, content=markdown(article.content), author=get_author_name(article.author), category=get_category_name(article.category), comments=comments_arr,tags=tags_arr,form=form)
+    return render_template(current_theme().value + '/article.html', title=article.title, content=markdown(article.content), author=get_user(article.author).nickname, category=get_category(article.category).name, date=article.date,comments=comments_arr,tags=tags_arr,form=form)
 
 @frontend.route('/search', methods=('GET', 'POST'))
 def search_article():
@@ -195,7 +195,12 @@ def edit_article(article_id):
     if not article:
         return render_template(current_theme().value + '/404.html')
 
-    form = NewArticleForm()
+    arr = []
+    tags = get_article_tags(article_id)
+    for i in range(len(tags)):
+        tag = get_tag(tags[i].tag_id)
+        arr.append(tag)
+    form = NewArticleForm(category=get_category(article.category),tag=arr)
 
     if form.validate_on_submit():
         update_article(article_id=article_id, title=form.title.data, content=form.content.data, category=form.category.data.id)
@@ -268,11 +273,12 @@ def delete_comment(comment_id):
 @frontend.route('/admin/site_settings', methods=('GET', 'POST'))
 @login_required
 def site_settings():
-    form = NewSettingForm(theme=current_theme().value)
+    form = NewSettingForm(theme=current_theme().value,address=current_address().value)
 
     if form.validate_on_submit():
         set_theme(form.theme.data)
-
+        set_address(form.address.data)
+        
         return redirect(url_for('.index'))
 
     return render_template(current_theme().value + '/setting.html',form=form)
@@ -313,7 +319,7 @@ def edit_tag(tag_id):
         
         return redirect(url_for('.index'))
 
-    form.name=tag.name
+    form.name.data=tag.name
 
     return render_template(current_theme().value + '/edit_tag.html', form=form)
 

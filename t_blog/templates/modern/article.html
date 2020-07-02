@@ -1,5 +1,5 @@
 {% import "bootstrap/wtf.html" as wtf %}
-{%- extends "base.html" %}
+{%- extends "modern/base.html" %}
 {% block head %}
 {{super()}}
 <style type="text/css">
@@ -96,7 +96,7 @@
 							<div class="jumbotron" > <!--文章首部信息区:文章标题+作者+分类-->
 								<div class="title-name"> {{ title }} </div>
 								<div class="container">
-									<div class="author-name"> Author: {{ author }} </div>
+									<div class="author-name"> @{{ author }} at {{date}} </div>
 									<div class="category-name"> Category: {{ category }} </div>	
 								</div>
 								

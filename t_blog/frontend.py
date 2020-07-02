@@ -222,8 +222,7 @@ def delete_article(article_id):
 
     if not article:
         return render_template(get_current_theme().value + '/404.html')
-    drop_tag_relation(article_id)
-    drop_comments(article_id)
+    
     drop_article(article_id)
 
     return redirect(url_for('.index'))
@@ -273,7 +272,7 @@ def delete_comment(comment_id):
 @frontend.route('/admin/site_settings', methods=('GET', 'POST'))
 @login_required
 def site_settings():
-    form = NewSettingForm(theme=get_get_current_theme().value,address=get_site_url().value)
+    form = NewSettingForm(theme=get_current_theme().value,address=get_site_url().value)
 
     if form.validate_on_submit():
         set_current_theme(form.theme.data)

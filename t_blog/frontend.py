@@ -277,7 +277,7 @@ def site_settings():
 
     if form.validate_on_submit():
         set_current_theme(form.theme.data)
-        get_site_url(form.address.data)
+        set_site_url(form.address.data)
         
         return redirect(url_for('.index'))
 

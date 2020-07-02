@@ -8,14 +8,13 @@
 
 {% block styles -%}
     {{super()}} 
-	<link rel="shortcut icon" type="images/x-icon" href="/static/favicon.ico">
-	<link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/fontawesome.min.css"/>
-	<link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/zui/1.9.1/css/zui.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='index.css')}}" />
+	<link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"/>
+	<link rel="shortcut icon" type="images/x-icon" href="/static/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="/static/zui.css"/>
 {% endblock %}
 
 {% block navbar %}
-	<!--顶部导航-->
 	<div class="d1">
 		<div class="container-navbar">
 			<div class="T-icon">
@@ -25,7 +24,6 @@
 			</div>
 			
 			{{nav.frontend_top.render()}}
-
 			<div class="other-navbar">
 				<a href="/help.html" target="_self">
 					<i class="fa fa-book"></i> &nbsp; Help
@@ -56,50 +54,158 @@
 {% endblock %}
 	
 {% block content %}
-		<div class="content">
-			<div class="row">
-				<div class="left-side">
-					<div class="welcome">
-						<h1>Welcome to T-Blog</h1>
-					</div>
-					<div class="write">
-						{% for info in articles %}
-							<div class="container-index">
-								<div id="passage-contain">
-									<div class="passage">
-										<div class="title">
-											<h2><a href="/article/{{ info[0] }}"> {{ info[1] }} </a></h2>
-										</div>
-										<div class="abstract">
-											{{ info[4] }}
-										</div>
-										<div class="meta">
-											<p><b>@{{ info[2] }}</b> at <i>{{ info[3] }}</i></p>
-										</div>
-									
-									</div>
-									<div class="passage-image">
-										<img src="../static/images/passage_image.jpg" height="170px" width="170px"/>
-									</div>
-								</div>							
-							</div>
-						<hr/>	
-						{% endfor %}
-					</div>
+	<div class="content">
+		<div class="row">
+			{% block ownself %}
+			<div class="left-side">
+				<div class="welcome">
+					<div id="myNiceCarousel" class="carousel slide" data-ride="carousel">
+					  <!-- 圆点指示器 -->
+					  <ol class="carousel-indicators">
+					    <li data-target="#myNiceCarousel" data-slide-to="0" class="active"></li>
+					    <li data-target="#myNiceCarousel" data-slide-to="1"></li>
+					    <li data-target="#myNiceCarousel" data-slide-to="2"></li>
+					  </ol>
 					
+					  <!-- 轮播项目 -->
+					  <div class="carousel-inner">
+					    <div class="item active">
+					      <img alt="First slide" src="http://openzui.com/docs/img/slide1.jpg">
+					      <div class="carousel-caption">
+					        <h3>我是第一张幻灯片</h3>
+					        <p>:)</p>
+					      </div>
+					    </div>
+					    <div class="item">
+					      <img alt="Second slide" src="http://openzui.com/docs/img/slide2.jpg">
+					      <div class="carousel-caption">
+					        <h3>我是第二张幻灯片</h3>
+					        <p>0.0</p>
+					      </div>
+					    </div>
+					    <div class="item">
+					      <img alt="Third slide" src="http://openzui.com/docs/img/slide3.jpg">
+					      <div class="carousel-caption">
+					        <h3>我是第三张幻灯片</h3>
+					        <p>最后一张咯~</p>
+					      </div>
+					    </div>
+					  </div>
+					
+					  <!-- 项目切换按钮 -->
+					  <a class="left carousel-control" href="#myNiceCarousel" data-slide="prev">
+					    <span class="icon icon-chevron-left"></span>
+					  </a>
+					  <a class="right carousel-control" href="#myNiceCarousel" data-slide="next">
+					    <span class="icon icon-chevron-right"></span>
+					  </a>
+					</div>
 				</div>
-				
-				<div class="right-side">
-					
+				<div class="write">
+					{% for info in articles %}
+						<div class="container-index">
+							<div id="passage-contain">
+								<div class="passage">
+									<div class="title">
+										<h2><a href="/article/{{ info[0] }}"> {{ info[1] }} </a></h2>
+									</div>
+									<div class="abstract">
+										{{ info[4] }}
+									</div>
+									<div class="meta">
+										<p><b>@{{ info[2] }}</b> at <i>{{ info[3] }}</i></p>
+									</div>
+								
+								</div>
+								<div class="passage-image">
+									<img src="/static/images/passage_image.jpg" height="170px" width="170px"/>
+								</div>
+							</div>							
+						</div>
+					<hr/>	
+					{% endfor %}
 				</div>
 				
 			</div>
-			<footer style="clear:both;">
-				<div class="footer-information">
-					
+			{%- endblock %}
+			
+			{% block sidebar %}
+			<div class="right-side">
+				<div class="side-search">
+					{{wtf.quick_form(form, novalidate=True)}}
+				</div>   
+				{% block side %}
+				<!--最新文章-->
+				<div class="card border-0 rounded-0 px-3 mb-2 mb-md-3" id="tag-card">
+				    <div class="card-header bg-white px-0">
+				        <strong><i class="fa fa-pencil mr-2 f-17"></i>最新文章</strong>
+				    </div>
+				    <ul class="list-group list-group-flush f-16">
+				        
+				        <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+				            <a class="category-item" href="/article/python-ffprobe/"
+				               title="使用ffprobe分析视频，python代码调用ffprobe获取视频信息">使用ffprobe分析视频，python代码调用f.</a>
+				            <span class="badge text-center"></span>
+				        </li>
+				        <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+				            <a class="category-item" href="/article/python-ffprobe/"
+				               title="使用ffprobe分析视频，python代码调用ffprobe获取视频信息">使用ffprobe分析视频，python代码调用f.</a>
+				            <span class="badge text-center"></span>
+				        </li>       
+				    </ul>
 				</div>
-			</footer>
-		</div> 
+				<!--文章分类-->
+				<div class="card border-0 rounded-0 px-3 mb-2 mb-md-3" id="category-card">
+				    <div class="card-header bg-white px-0">
+				        <strong><i class="fa fa-book mr-2 f-17"></i>文章分类</strong>
+				    </div>
+				    
+				    <ul class="list-group list-group-flush f-16">
+				        
+				        <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+				            <a class="category-item" href="/category/python-syr/"
+				               title="查看【python手艺人】分类下所有文章">python手艺人</a>
+				            <span class="badge text-center">31</span>
+				        </li>
+				        
+				        <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+				            <a class="category-item" href="/category/python-crawler/"
+				               title="查看【python爬虫】分类下所有文章">python爬虫</a>
+				            <span class="badge text-center">21</span>
+				        </li>			        
+				    </ul>
+				</div>
+				{%- endblock %}
+			</div>
+			{%- endblock %}
+		</div>
+		{% block footer %}
+	<!-- 底部设计 -->
+		<footer style="clear:both;">
+			<div class="footer-information">
+				<div class="col-left" style="float: left; width: 500px;">
+					<p>版权所有 &copy; T-Blog (V-1.0)</p>
+					<p>备案号： 粤ICP备05084312号</p>
+				</div>
+				<div class="col-center" style="float: left;width: 500px;">
+					<p><i class="fa fa-link fa-2x" style="font-size: 16px;"></i>&nbsp;友情链接</p>
+					<p><a href="https://www.jianshu.com/" target="_blank">简书</a>&nbsp;&nbsp;&nbsp;
+					<a href="https://wordpress.org/" target="_blank">wordpress</a>&nbsp;&nbsp;&nbsp;
+					<a href="https://github.com/SJoshua/T-Blog" target="_blank">github地址</a>&nbsp;&nbsp;&nbsp;
+					<a href="https://github.com/SJoshua/T-Blog/blob/master/README.md" target="_blank">关于我</a>
+					</p>
+				</div>
+		<!--		<i class="fa fa-qq fa-lg"></i> fa-2x  文字图标这么用-->
+				<div class="col-right" style="float: left;width: 500px;">
+					<p><i class="fa fa-volume-control-phone fa-lg" style="font-size: 16px;"></i>&nbsp; 联系我们</p>
+					<p>广东★华南理工大学软件学院&nbsp;&nbsp;&nbsp;<i class="fa fa-qq fa-lg" style="font-size: 16px;"></i>
+					/<i class="fa fa-wechat (alias) fa-lg" style="font-size: 16px;"></i>：&nbsp;12345678
+					</p>
+				</div>
+			</div>
+		</footer>
+		{%- endblock %}
+	</div>
 {%- endblock %}
 
 

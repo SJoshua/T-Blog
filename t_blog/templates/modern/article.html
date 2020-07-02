@@ -1,38 +1,159 @@
-{%- extends "modern/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{%- extends "base.html" %}
+{% block head %}
+{{super()}}
+<style type="text/css">
 
-{% block content %}
-    <div class="container">
-        <div class="jumbotron">
-            <h5> Category: {{ category }} </h5>
-            <h1> {{ title }} </h1>
-            <h4> Author: {{ author }} </h4>
-            <h6>Tags</h6>
-            {% for info in tags %}
-                <hr>
-                <div>
-                    <p><b>{{info[1]}}</b></p>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="jumbotron">
-            {{ content | safe }}
-        </div>
-        <div class="jumbotron">
-            <h2>Comments</h2>
-            {% for info in comments %}
-                <hr>
-                <div>
-                    <p><b>@{{ info[1] }}</b> at <i>{{ info[3] }}</i></p>
-                    {{ info[2] | safe }}
-                </div>
-            {% endfor %}
-        </div>
-        
-        <div class="jumbotron">
-            <h2>Leave a comment</h2>
-            {{wtf.quick_form(form, novalidate=True)}}
-        </div>   
-    </div>
+	.container>.jumbotron {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		padding-left: 30px;
+		padding-right: 30px;
+		background-color: rgb(255,255,255);
+	}
+	.self-comment {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		background-color: rgb(245,245,245);
+	}
+	.title-name{
+		color:rgb(23,162,184);
+		font-size: 30px;
+		line-height: 45px;
+		margin-top: 5px;
+		text-align: center;
+	}
+	.author-name {
+		float: left;
+		font-family: Arial, Helvetica, sans-serif,微软雅黑;
+		font-size: 20px;
+		line-height: 25px;
+	}
+	.category-name {
+		float: right;
+		font-family: Arial, Helvetica, sans-serif,微软雅黑;
+		font-size: 20px;
+		line-height: 25px;
+	}
+	.tag-name {
+		font-family: Arial, Helvetica, sans-serif,微软雅黑;
+		font-size: 15px;
+		height: 40px;
+		line-height: 45px;
+		padding-left: 15px;
+	}
+	.tag-info {
+		line-height: 30px;
+		padding-left: 15px;
+	}
+	.artical-body p{
+	margin-bottom: 1em;  
+	display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+	font-size: 16px;
+	line-height: 1.8;
+	}
+	.artical-body h1{
+		font-weight: 600;
+		margin: 10px 0 10px 0;
+		padding: 0 10px;
+		border-left: 5px solid #20c997;
+		background-color: #f7f7f7;
+		line-height: 2em;
+		font-size: 1.3em;
+	}
+	.artical-body h2{
+		font-weight: 600;
+		font-size: 1.2em;
+		line-height: 1.2;
+	}
+	.artical-body pre{
+		font-size: 85%;
+		    padding: .5rem;
+		    color: #d4d7da;
+			line-height: 1.5;
+			    display: block;
+				    margin-top: 0;
+				    margin-bottom: 1rem;
+				    overflow: auto;
+	}
+	.comment p{
+		font-size: 15px;
+	}
+	.right-side,.side-search{
+		height: auto;
+	}
+</style>
 {%- endblock %}
- 
+ {% block content %}
+ 	<div class="content">
+ 		<div class="row">
+ 			{% block ownself %}
+ 					<div class="container col-md-8">
+							<div class="jumbotron" > <!--文章首部信息区:文章标题+作者+分类-->
+								<div class="title-name"> {{ title }} </div>
+								<div class="container">
+									<div class="author-name"> Author: {{ author }} </div>
+									<div class="category-name"> Category: {{ category }} </div>	
+								</div>
+								
+								<div id="tianchong" style="height: 2px; background-color: orange;">
+									
+								</div>
+								<div class="tag-name">Tags</div>
+								{% for info in tags %}
+									<div id="tianchong" style="height: 1.5px; background-color: rgb(229,229,229);">
+										
+									</div>
+									<div class="tag-info">
+										<b>{{info[1]}}</b>
+									</div>
+								{% endfor %}
+							</div>
+							
+							<div class="jumbotron artical-body"> <!--文章内容-->
+							    {{ content | safe }}
+							</div>
+							<blockquote class="p-1 f-14 mt-3" style="border-left: 4px solid #dc3545;background-color: white;">
+							        <p class="m-1">
+										<strong>版权声明：</strong>如无特殊说明，文章均为<a href='/'>T-Blog</a>
+										原创，转载请注明出处
+									</p>
+							        <p class="m-1">
+										<strong>本文链接：</strong><a href="https://github.com/SJoshua/T-Blog">https://github.com/SJoshua/T-Blog</a>
+									</p>
+							</blockquote>
+							<div class="jumbotron comment"><!--显示文章评论-->
+								<h2 style="color:black;font-size: 25px;margin-bottom: 0;">Comments</h2>
+								{% for info in comments %}
+									<hr style="margin: 0px;margin-bottom: 5px;">
+									<div style="margin-top: 5px;margin-bottom: 10px;">
+										<b style="font-size: 15px;">@{{ info[1] }}</b> at <i>{{ info[3] }}</i>
+										{{ info[2] | safe }}
+									</div>
+								{% endfor %}
+								
+								<div class="jumbotron self-comment" style="padding-left: 0px;padding-right: 0px;"><!--自己给文章留言-->
+									<h2 style="color:black;font-size: 25px;margin-bottom: 0;">Leave a comment</h2>
+									{{wtf.quick_form(form, novalidate=True)}}
+								</div>
+							   
+							</div>
+					
+					
+					</div>
+ 					{% block sidebar %}
+ 					{{super()}} 
+ 					{%- endblock %}
+ 			{%- endblock %}		
+ 		</div>
+		
+ 		{% block footer %}
+ 			{{super()}} 
+ 		{%- endblock %}
+ 	</div>
+ 	
+ {%- endblock %}

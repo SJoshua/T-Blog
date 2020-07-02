@@ -26,8 +26,8 @@
 				<a href="../help.html" target="_self">
 					<i class="fa fa-book"></i> &nbsp; Help
 				</a>
-			</div> -->
-			
+			</div>
+			 -->
 			<div class="searchbar">
 				<div class="search">
 					<div class="search-content">
@@ -50,6 +50,7 @@
 		</div>
 	</div>
 {% endblock %}
+
 {% block content %}
 		<div class="content">
 			<div class="row">
@@ -131,7 +132,7 @@
 					<!--最新文章-->
 					<div class="card border-0 rounded-0 px-3 mb-2 mb-md-3" id="tag-card">
 					    <div class="card-header bg-white px-0">
-					        <strong><i class="fa fa-book mr-2 f-17"></i>最新文章</strong>
+					        <strong><i class="fa fa-pencil mr-2 f-17"></i>最新文章</strong>
 					    </div>
 					    <ul class="list-group list-group-flush f-16">
 					        
@@ -170,15 +171,41 @@
 					</div>
 					
 				</div>
-				
 			</div>
+		<!-- 底部设计 -->
+			<footer style="clear:both;">
+				<div class="footer-information">
+					<div class="col-left" style="float: left; width: 500px;">
+						<p>版权所有 &copy; T-Blog (V-1.0)</p>
+						<p>备案号： 粤ICP备05084312号</p>
+					</div>
+					<div class="col-center" style="float: left;width: 500px;">
+						<p><i class="fa fa-link fa-2x" style="font-size: 16px;"></i>&nbsp;友情链接</p>
+						<p><a href="https://www.jianshu.com/" target="_blank">简书</a>&nbsp;&nbsp;&nbsp;
+						<a href="https://wordpress.org/" target="_blank">wordpress</a>&nbsp;&nbsp;&nbsp;
+						<a href="https://github.com/SJoshua/T-Blog" target="_blank">github地址</a>&nbsp;&nbsp;&nbsp;
+						<a href="https://github.com/SJoshua/T-Blog/blob/master/README.md" target="_blank">关于我</a>
+						</p>
+					</div>
+			<!--		<i class="fa fa-qq fa-lg"></i> fa-2x  文字图标这么用-->
+					<div class="col-right" style="float: left;width: 500px;">
+						<p><i class="fa fa-volume-control-phone fa-lg" style="font-size: 16px;"></i>&nbsp; 联系我们</p>
+						<p>广东★华南理工大学软件学院&nbsp;&nbsp;&nbsp;<i class="fa fa-qq fa-lg" style="font-size: 16px;"></i>
+						/<i class="fa fa-wechat (alias) fa-lg" style="font-size: 16px;"></i>：&nbsp;12345678
+						</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+<!--	
 			<footer style="clear:both;">
 				<div class="footer-information">
 					
 				</div>
 			</footer>
-		</div> 
+-->
 {%- endblock %}
+	
 {% block sidebar %}
 
 {% endblock %}

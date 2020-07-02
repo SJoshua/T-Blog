@@ -22,14 +22,11 @@ def init_db():
     Category.query.delete()
     new_admin = User(username='admin', password='admin', nickname='admin', email='admin@t_blog.com')
     default_category = Category(id=1, name='Uncategorized')
-    default_theme1 = Setting(id=1, key='current', value='modern')
-    db_session.add(default_theme1)
-    db_session.add(default_theme2)
+    default_theme = Setting(id=1, key='current', value='modern')
     db_session.add(new_admin)
     db_session.add(default_category)
+    db_session.add(default_theme)
     db_session.commit()
-
-
 
 def insert_article(title=None, content=None, author=None, category=None):
     new_article = Article(title=title.encode('utf-8'), content=content.encode('utf-8'), author=author, category=category)

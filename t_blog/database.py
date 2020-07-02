@@ -31,6 +31,13 @@ def init_db():
     db_session.add(site_url)
     db_session.commit()
 
+def drop_user(id):
+    articles = db_session.query(Article).filter(Article.author == id).all()
+    for article in articles:
+        drop_article(article.id) 
+    db_session.query(User).filter(User.id == id).delete()
+    db_session.commit()
+
 def insert_article(title=None, content=None, author=None, category=None):
     new_article = Article(title=title.encode('utf-8'), content=content.encode('utf-8'), author=author, category=category)
     db_session.add(new_article)
@@ -42,6 +49,8 @@ def update_article(article_id=None, title=None, content=None, category=None):
     db_session.commit()
 
 def drop_article(article_id=None):
+    drop_comments(article_id)
+    drop_tag_relation(article_id)
     db_session.query(Article).filter(Article.id == article_id).delete()
     db_session.commit()
 
@@ -71,6 +80,7 @@ def update_tag(tag_id=None,name=None):
     db_session.commit()
 
 def drop_tag(tag_id=None):
+    drop_article_relation(tag_id)
     db_session.query(Tag).filter(Tag.id==tag_id).delete()
     db_session.commit()
 
@@ -84,6 +94,7 @@ def update_category(category_id=None,name=None):
     db_session.commit()
 
 def drop_category(category_id=None):
+    db_session.query(Article).filter(Article.category == category_id).update({"category": 1})
     db_session.query(Category).filter(Category.id==category_id).delete()
     db_session.commit()
 
@@ -94,6 +105,10 @@ def insert_tag_relation(article_id=None,tag_id=None):
 
 def drop_tag_relation(article_id=None):
     db_session.query(Tag_Relation).filter(Tag_Relation.article_id==article_id).delete()
+    db_session.commit()
+
+def drop_article_relation(tag_id=None):
+    db_session.query(Tag_Relation).filter(Tag_Relation.tag_id==tag_id).delete()
     db_session.commit()
 
 def get_user(user_id):

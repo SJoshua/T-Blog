@@ -223,8 +223,7 @@ def delete_article(article_id):
 
     if not article:
         return render_template(get_current_theme().value + '/404.html')
-    drop_tag_relation(article_id)
-    drop_comments(article_id)
+    
     drop_article(article_id)
 
     return redirect(url_for('.index'))

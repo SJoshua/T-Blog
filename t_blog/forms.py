@@ -45,7 +45,7 @@ class NewArticleForm(FlaskForm):
         return Obj.name
 
     category = QuerySelectField(u'Category', validators=[Required()], query_factory=query_category_factory, get_pk=get_pk,get_label=get_label)
-    tag = QuerySelectMultipleField(u'Tag', validators=[Required()], query_factory=query_tag_factory, get_pk=get_pk,get_label=get_label)
+    tag = QuerySelectMultipleField(u'Tag', validators=[Optional()], query_factory=query_tag_factory, get_pk=get_pk,get_label=get_label)
     content = TextAreaField(u'Article', render_kw={"rows": 20})
     submit = SubmitField(u'Publish')
 

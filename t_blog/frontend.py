@@ -76,19 +76,20 @@ def show_article(article_id):
 
     form = NewCommentForm()
 
-    if form.validate_on_submit():
-        # WARNING: UNSAFE!
-        # TODO: Add filter for content
-        insert_comment(article_id=article_id, author=form.author.data, email=form.email.data, content=form.content.data, ip=request.remote_addr, approved=True)
-
     comments_arr = []
     for i in range(len(comments)):
         comments_arr.append((comments[i].id, comments[i].author, markdown(comments[i].content), comments[i].date))
 
-        tags_arr = []
+    tags_arr = []
     for i in range(len(tags)):
         tag = get_tag(tags[i].tag_id)
         tags_arr.append((tag.id,tag.name))
+
+    if form.validate_on_submit():
+        # WARNING: UNSAFE!
+        # TODO: Add filter for content
+        insert_comment(article_id=article_id, author=form.author.data, email=form.email.data, content=form.content.data, ip=request.remote_addr, approved=True)
+        return render_template(get_current_theme().value + '/article.html', title=article.title, content=markdown(article.content), author=get_user(article.author).nickname, category=get_category(article.category).name, date=article.date,comments=comments_arr,tags=tags_arr,form=form)
 
     return render_template(get_current_theme().value + '/article.html', title=article.title, content=markdown(article.content), author=get_user(article.author).nickname, category=get_category(article.category).name, date=article.date,comments=comments_arr,tags=tags_arr,form=form)
 
@@ -354,7 +355,8 @@ def manage_categories():
     categories = get_categories()
     arr = []
     for i in range(len(categories)):
-        arr.append((categories[i].id, categories[i].name))
+        if categories[i].name != 'Uncategorized':
+            arr.append((categories[i].id, categories[i].name))
     return render_template(get_current_theme().value + '/manage_categories.html', categories=arr)
 
 @frontend.route('/admin/edit_category/<int:category_id>', methods=('GET', 'POST'))

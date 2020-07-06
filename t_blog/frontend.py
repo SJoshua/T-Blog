@@ -39,7 +39,7 @@ def index():
 
     if form.validate_on_submit():
         
-        return search_result(form.Type.data,form.key_word.data)
+        return redirect(str(form.Type.data) + '%' + form.key_word.data)
 
     for i in range(len(articles)):
         user = get_user(articles[i].author)
@@ -80,11 +80,11 @@ def search_article():
 
     if form.validate_on_submit():
 
-        return search_result(form.Type.data,form.key_word.data)
+        return redirect(str(form.Type.data) + '%' + form.key_word.data)
     
     return render_template(get_current_theme().value + '/search.html',form=form)
 
-@frontend.route('/<int:Type>&<string:key_word>', methods=('GET', 'POST'))
+@frontend.route('/<int:Type>%<string:key_word>', methods=('GET', 'POST'))
 def search_result(Type,key_word):
     form = NewSearchForm()
     arr = []
@@ -107,7 +107,7 @@ def search_result(Type,key_word):
                     user = get_user(articles[i].author)
                     arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
 
-    return render_template(get_current_theme().value + '/index.html',articles=arr , form = form)
+    return render_template(get_current_theme().value + '/index.html', articles=arr , form = form)
 
 # for development
 @frontend.route('/init_db')

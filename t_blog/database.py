@@ -126,6 +126,9 @@ def get_article(id):
 def get_articles():
     return db_session.query(Article).order_by(Article.id.desc()).all()
 
+def get_category_articles(category_id):
+    return db_session.query(Article).filter(Article.category == category_id).all()
+
 def get_tag(id):
     return db_session.query(Tag).filter(Tag.id==id).first()
 

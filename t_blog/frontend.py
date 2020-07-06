@@ -33,18 +33,28 @@ nav.register_element('frontend_top', Navbar(
 @frontend.route('/', methods=('GET', 'POST'))
 def index():
     articles = get_articles()
+    categories = get_categories()
     arr = []
-    
+    articles_arr = []
+    categories_arr = []
     form = NewSearchForm()
 
     if form.validate_on_submit():
         
         return redirect(str(form.Type.data) + '%' + form.key_word.data)
 
+    for i in range(min(len(articles),2)):
+        arr.append((articles[i].id,articles[i].title))
+
     for i in range(len(articles)):
         user = get_user(articles[i].author)
-        arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
-    return render_template(get_current_theme().value + '/index.html', articles=arr, form = form)
+        articles_arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
+
+    for i in range(len(categories)):
+        articles = get_category_articles(categories[i].id)
+        categories_arr.append((len(articles),categories[i].name))
+
+    return render_template(get_current_theme().value + '/index.html', articles=articles_arr, show_articles = arr, categories=categories_arr, form = form)
 
 @frontend.route('/article/<int:article_id>', methods=('GET', 'POST'))
 def show_article(article_id):
@@ -87,7 +97,19 @@ def search_article():
 @frontend.route('/<int:Type>%<string:key_word>', methods=('GET', 'POST'))
 def search_result(Type,key_word):
     form = NewSearchForm()
+    articles = get_articles()
+    categories = get_categories()
     arr = []
+    sarr = []
+    categories_arr = []
+
+    for i in range(min(len(articles),2)):
+        sarr.append((articles[i].id,articles[i].title))
+    
+    for i in range(len(categories)):
+        articles = get_category_articles(categories[i].id)
+        categories_arr.append((len(articles),categories[i].name))
+
     if Type == 1:
         articles = search_articles(key_word)
         for i in range(len(articles)):
@@ -107,7 +129,7 @@ def search_result(Type,key_word):
                     user = get_user(articles[i].author)
                     arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
 
-    return render_template(get_current_theme().value + '/index.html', articles=arr , form = form)
+    return render_template(get_current_theme().value + '/index.html', articles = arr, show_articles = sarr, categories=categories_arr, form = form)
 
 # for development
 @frontend.route('/init_db')

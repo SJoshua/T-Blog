@@ -84,7 +84,7 @@ def search_article():
     
     return render_template(get_current_theme().value + '/search.html',form=form)
 
-@frontend.route('/<int:Type>/<string:key_word>', methods=('GET', 'POST'))
+@frontend.route('/<int:Type>&<string:key_word>', methods=('GET', 'POST'))
 def search_result(Type,key_word):
     form = NewSearchForm()
     arr = []

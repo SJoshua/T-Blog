@@ -41,7 +41,7 @@ def index():
 
     if form.validate_on_submit():
         
-        return redirect(str(form.Type.data) + '%' + form.key_word.data)
+        return redirect('/result/?Type=' + str(form.Type.data) + '&s=' + form.key_word.data)
 
     for i in range(min(len(articles),2)):
         arr.append((articles[i].id,articles[i].title))
@@ -90,12 +90,14 @@ def search_article():
 
     if form.validate_on_submit():
 
-        return redirect(str(form.Type.data) + '%' + form.key_word.data)
+        return redirect('/result/?Type=' + str(form.Type.data) + '&s=' + form.key_word.data)
     
     return render_template(get_current_theme().value + '/search.html',form=form)
 
-@frontend.route('/<int:Type>%<string:key_word>', methods=('GET', 'POST'))
-def search_result(Type,key_word):
+@frontend.route('/result/', methods=('GET', 'POST'))
+def search_result():
+    Type = request.args.get('Type', 1, type=int)
+    key_word = request.args.get('s', '', type=str)
     form = NewSearchForm()
     articles = get_articles()
     categories = get_categories()

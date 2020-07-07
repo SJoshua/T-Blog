@@ -64,8 +64,9 @@ class NewCategoryForm(FlaskForm):
     submit = SubmitField(u'Submit')
 
 class NewSearchForm(FlaskForm):
-    Type = SelectField(u'Type',coerce = int,validators=[Required()],choices=[(1,'Content'),(2,'Tag'),(3,'Category')])
-    key_word = StringField(u'Keywords',validators=[Required()])
+    category = StringField(u'Category',validators=[Optional()])
+    tag = StringField(u'Tag',validators=[Optional()])
+    key_word = StringField(u'Keywords',validators=[Optional()])
     search = SubmitField(u'Search')
 
 class NewSettingForm(FlaskForm):

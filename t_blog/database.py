@@ -138,6 +138,9 @@ def get_tags():
 def get_article_tags(article_id):
     return db_session.query(Tag_Relation).filter(Tag_Relation.article_id==article_id).all()
 
+def get_relation(article_id,tag_id):
+    return db_session.query(Tag_Relation).filter((Tag_Relation.article_id == article_id) & (Tag_Relation.tag_id == tag_id)).first()
+
 def get_category(id):
     return db_session.query(Category).filter(Category.id == id).first()
 
@@ -162,13 +165,11 @@ def verify_password(username=None, password=None):
 def search_articles(keyword):
     return db_session.query(Article).filter((Article.content.like('%%%s%%' % keyword)) | (Article.title.like('%%%s%%' % keyword))).all()
 
-def search_tag(keyword):
-    tag = db_session.query(Tag).filter(Tag.name==keyword).first()
-    return  db_session.query(Tag_Relation).filter(Tag_Relation.tag_id==tag.id).all()
+def search_tag(name):
+    return db_session.query(Tag).filter(Tag.name==name).first()
 
-def search_category(keyword):
-    category = db_session.query(Category).filter(Category.name==keyword).first()
-    return db_session.query(Article).filter(Article.category == category.id).all()
+def search_category(name):
+    return db_session.query(Category).filter(Category.name==name).first()
 
 def get_current_theme():
     return db_session.query(Setting).filter(Setting.key == 'current_theme').first()

@@ -41,7 +41,7 @@ def index():
 
     if form.validate_on_submit():
         
-        return redirect('/result/?Type=' + str(form.Type.data) + '&s=' + form.key_word.data)
+        return redirect('/result/?s=' + form.key_word.data + '&category=' + form.category.data + '&tag=' + form.tag.data)
 
     for i in range(min(len(articles),2)):
         arr.append((articles[i].id,articles[i].title))
@@ -90,14 +90,17 @@ def search_article():
 
     if form.validate_on_submit():
 
-        return redirect('/result/?Type=' + str(form.Type.data) + '&s=' + form.key_word.data)
+        return redirect('/result/?s=' + form.key_word.data + '&category=' + form.category.data + '&tag=' + form.tag.data)
     
     return render_template(get_current_theme().value + '/search.html',form=form)
 
 @frontend.route('/result/', methods=('GET', 'POST'))
 def search_result():
-    Type = request.args.get('Type', 1, type=int)
     key_word = request.args.get('s', '', type=str)
+    category_name = request.args.get('category', '', type=str)
+    tag_name = request.args.get('tag', '', type=str)
+    category_id = 0
+    tag_id = 0
     form = NewSearchForm()
     articles = get_articles()
     categories = get_categories()
@@ -112,22 +115,34 @@ def search_result():
         articles = get_category_articles(categories[i].id)
         categories_arr.append((len(articles),categories[i].name))
 
-    if Type == 1:
+    if category_name != '':
+        category = search_category(category_name)
+        if not category:
+            category_id = -1
+        else:
+            category_id = category.id
+
+    if tag_name != '':
+        tag = search_tag(tag_name)
+        if not tag:
+            tag_id = -1
+        else:
+            tag_id = tag.id
+
+    if key_word == '':
+        articles = get_articles()
+        for i in range(len(articles)):
+            relation = get_relation(articles[i].id,tag_id)
+            if tag_id == 0 or relation:
+                if category_id == 0 or category_id == articles[i].category:
+                    user = get_user(articles[i].author)
+                    arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
+    else:
         articles = search_articles(key_word)
         for i in range(len(articles)):
-            user = get_user(articles[i].author)
-            arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
-    else:
-        if Type == 2:
-            articles = search_tag(key_word)
-            for i in range(len(articles)):
-                article = get_article(articles[i].article_id)
-                user = get_user(article.author)
-                arr.append((article.id, article.title,user.username,article.date,article.content)) 
-        else:
-            if Type == 3:
-                articles = search_category(key_word)
-                for i in range(len(articles)):
+            relation = get_relation(articles[i].id,tag_id)
+            if tag_id == 0 or relation:
+                if category_id == 0 or category_id == articles[i].category:
                     user = get_user(articles[i].author)
                     arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
 

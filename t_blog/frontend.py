@@ -41,7 +41,7 @@ def index():
 
     if form.validate_on_submit():
         
-        return redirect('/result/?s=' + form.key_word.data + '&category=' + form.category.data + '&tag=' + form.tag.data)
+        return redirect('/result/?s=' + form.key_word.data + '&category=' + form.category.data.name + '&tag=' + form.tag.data.name)
 
     for i in range(min(len(articles),2)):
         arr.append((articles[i].id,articles[i].title))
@@ -90,7 +90,7 @@ def search_article():
 
     if form.validate_on_submit():
 
-        return redirect('/result/?s=' + form.key_word.data + '&category=' + form.category.data + '&tag=' + form.tag.data)
+       return redirect('/result/?s=' + form.key_word.data + '&category=' + form.category.data.name + '&tag=' + form.tag.data.name)
     
     return render_template(get_current_theme().value + '/search.html',form=form)
 

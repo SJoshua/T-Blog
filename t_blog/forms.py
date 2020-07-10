@@ -64,20 +64,20 @@ class NewCategoryForm(FlaskForm):
     submit = SubmitField(u'Submit')
 
 class NewSearchForm(FlaskForm):
-    def query_category_factory():
-        return [Category(r.id,r.name) for r in db_session.query(Category).all()]
-
-    def query_tag_factory():
-        return [Tag(r.id,r.name) for r in db_session.query(Tag).all()]
-    
-    def get_pk(Obj):
-        return Obj.id
-    
-    def get_label(Obj):
-        return Obj.name
-
-    category = QuerySelectField(u'Category', validators=[Optional()], default=Category(0,''), query_factory=query_category_factory, get_pk=get_pk,get_label=get_label)
-    tag = QuerySelectField(u'Tag', validators=[Optional()], default=Tag(0,''), query_factory=query_tag_factory, get_pk=get_pk,get_label=get_label)
+#    def query_category_factory():
+#        return [Category(r.id,r.name) for r in db_session.query(Category).all()]
+#
+#    def query_tag_factory():
+#        return [Tag(r.id,r.name) for r in db_session.query(Tag).all()]
+#    
+#    def get_pk(Obj):
+#        return Obj.id
+#    
+#    def get_label(Obj):
+#        return Obj.name
+#
+#    category = QuerySelectField(u'Category', validators=[Optional()], default=Category(0,''), query_factory=query_category_factory, get_pk=get_pk,get_label=get_label)
+#    tag = QuerySelectField(u'Tag', validators=[Optional()], default=Tag(0,''), query_factory=query_tag_factory, get_pk=get_pk,get_label=get_label)
     key_word = StringField(u'Keywords',validators=[Optional()])
     search = SubmitField(u'Search')
 

@@ -138,6 +138,9 @@ def get_tags():
 def get_article_tags(article_id):
     return db_session.query(Tag_Relation).filter(Tag_Relation.article_id==article_id).all()
 
+def get_tag_articles(tag_id):
+    return db_session.query(Tag_Relation).filter(Tag_Relation.tag_id==tag_id).all()
+
 def get_relation(article_id,tag_id):
     return db_session.query(Tag_Relation).filter((Tag_Relation.article_id == article_id) & (Tag_Relation.tag_id == tag_id)).first()
 

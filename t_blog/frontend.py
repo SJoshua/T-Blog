@@ -34,14 +34,16 @@ nav.register_element('frontend_top', Navbar(
 def index():
     articles = get_articles()
     categories = get_categories()
+    tags = get_tags()
     arr = []
     articles_arr = []
     categories_arr = []
+    tags_arr = []
     form = NewSearchForm()
 
     if form.validate_on_submit():
         
-        return redirect('/result/?s=' + form.key_word.data + '&category=' + form.category.data + '&tag=' + form.tag.data)
+        return redirect('/result/?s=' + form.key_word.data)# + '&category=' + form.category.data.name + '&tag=' + form.tag.data.name)
 
     for i in range(min(len(articles),2)):
         arr.append((articles[i].id,articles[i].title))
@@ -54,13 +56,34 @@ def index():
         articles = get_category_articles(categories[i].id)
         categories_arr.append((len(articles),categories[i].name))
 
-    return render_template(get_current_theme().value + '/index.html', articles=articles_arr, show_articles = arr, categories=categories_arr, form = form)
+    for i in range(len(tags)):
+        articles = get_tag_articles(tags[i].id)
+        tags_arr.append((len(articles),tags[i].name))
+
+    return render_template(get_current_theme().value + '/index.html', articles=articles_arr, show_articles = arr, categories=categories_arr, tags=tags_arr, form = form)
 
 @frontend.route('/article/<int:article_id>', methods=('GET', 'POST'))
 def show_article(article_id):
     article = get_article(article_id)
     comments = get_comments(article_id)
-    tags= get_article_tags(article_id)
+    article_tags= get_article_tags(article_id)
+    articles = get_articles()
+    categories = get_categories()
+    tags = get_tags()
+    sarr = []
+    categories_arr = []
+    tags_arr = []
+
+    for i in range(min(len(articles),2)):
+        sarr.append((articles[i].id,articles[i].title))
+    
+    for i in range(len(categories)):
+        articles = get_category_articles(categories[i].id)
+        categories_arr.append((len(articles),categories[i].name))
+
+    for i in range(len(tags)):
+        articles = get_tag_articles(tags[i].id)
+        tags_arr.append((len(articles),tags[i].name))
 
     if not article:
         return render_template(get_current_theme().value + '/404.html')
@@ -71,28 +94,45 @@ def show_article(article_id):
     for i in range(len(comments)):
         comments_arr.append((comments[i].id, comments[i].author, markdown(comments[i].content), comments[i].date))
 
-    tags_arr = []
-    for i in range(len(tags)):
-        tag = get_tag(tags[i].tag_id)
-        tags_arr.append((tag.id,tag.name))
+    article_tags_arr = []
+    for i in range(len(article_tags)):
+        tag = get_tag(article_tags[i].tag_id)
+        article_tags_arr.append((tag.id,tag.name))
 
     if form.validate_on_submit():
         # WARNING: UNSAFE!
         # TODO: Add filter for content
         insert_comment(article_id=article_id, author=form.author.data, email=form.email.data, content=form.content.data, ip=request.remote_addr, approved=True)
-        return render_template(get_current_theme().value + '/article.html', title=article.title, content=markdown(article.content), author=get_user(article.author).nickname, category=get_category(article.category).name, date=article.date,comments=comments_arr,tags=tags_arr,form=form)
+        return render_template(get_current_theme().value + '/article.html', title=article.title, content=markdown(article.content), author=get_user(article.author).nickname, category=get_category(article.category).name, date=article.date,comments=comments_arr,article_tags=article_tags_arr, show_articles = sarr, categories=categories_arr, tags=tags_arr, form=form)
 
-    return render_template(get_current_theme().value + '/article.html', title=article.title, content=markdown(article.content), author=get_user(article.author).nickname, category=get_category(article.category).name, date=article.date,comments=comments_arr,tags=tags_arr,form=form)
+    return render_template(get_current_theme().value + '/article.html', title=article.title, content=markdown(article.content), author=get_user(article.author).nickname, category=get_category(article.category).name, date=article.date,comments=comments_arr,article_tags=article_tags_arr, show_articles = sarr, categories=categories_arr, tags=tags_arr, form=form)
 
 @frontend.route('/search', methods=('GET', 'POST'))
 def search_article():
     form = NewSearchForm()
+    articles = get_articles()
+    categories = get_categories()
+    tags = get_tags()
+    sarr = []
+    categories_arr = []
+    tags_arr = []
+
+    for i in range(min(len(articles),2)):
+        sarr.append((articles[i].id,articles[i].title))
+    
+    for i in range(len(categories)):
+        articles = get_category_articles(categories[i].id)
+        categories_arr.append((len(articles),categories[i].name))
+
+    for i in range(len(tags)):
+        articles = get_tag_articles(tags[i].id)
+        tags_arr.append((len(articles),tags[i].name))
 
     if form.validate_on_submit():
 
-        return redirect('/result/?s=' + form.key_word.data + '&category=' + form.category.data + '&tag=' + form.tag.data)
+       return redirect('/result/?s=' + form.key_word.data)# + '&category=' + form.category.data.name + '&tag=' + form.tag.data.name)
     
-    return render_template(get_current_theme().value + '/search.html',form=form)
+    return render_template(get_current_theme().value + '/search.html', show_articles = sarr, categories=categories_arr, tags=tags_arr, form=form)
 
 @frontend.route('/result/', methods=('GET', 'POST'))
 def search_result():
@@ -104,9 +144,11 @@ def search_result():
     form = NewSearchForm()
     articles = get_articles()
     categories = get_categories()
+    tags = get_tags()
     arr = []
     sarr = []
     categories_arr = []
+    tags_arr = []
 
     for i in range(min(len(articles),2)):
         sarr.append((articles[i].id,articles[i].title))
@@ -114,6 +156,10 @@ def search_result():
     for i in range(len(categories)):
         articles = get_category_articles(categories[i].id)
         categories_arr.append((len(articles),categories[i].name))
+
+    for i in range(len(tags)):
+        articles = get_tag_articles(tags[i].id)
+        tags_arr.append((len(articles),tags[i].name))
 
     if category_name != '':
         category = search_category(category_name)
@@ -146,7 +192,7 @@ def search_result():
                     user = get_user(articles[i].author)
                     arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
 
-    return render_template(get_current_theme().value + '/index.html', articles = arr, show_articles = sarr, categories=categories_arr, form = form)
+    return render_template(get_current_theme().value + '/index.html', articles = arr, show_articles = sarr, categories=categories_arr, tags=tags_arr, form = form)
 
 # for development
 @frontend.route('/init_db')

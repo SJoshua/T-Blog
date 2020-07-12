@@ -162,14 +162,14 @@ def search_result():
         tags_arr.append((len(articles),tags[i].name))
 
     if category_name != '':
-        category = search_category(category_name)
+        category = get_search_category(category_name)
         if not category:
             category_id = -1
         else:
             category_id = category.id
 
     if tag_name != '':
-        tag = search_tag(tag_name)
+        tag = get_search_tag(tag_name)
         if not tag:
             tag_id = -1
         else:
@@ -184,7 +184,7 @@ def search_result():
                     user = get_user(articles[i].author)
                     arr.append((articles[i].id, articles[i].title,user.username,articles[i].date,articles[i].content))
     else:
-        articles = search_articles(key_word)
+        articles = get_search_articles(key_word)
         for i in range(len(articles)):
             relation = get_relation(articles[i].id,tag_id)
             if tag_id == 0 or relation:
@@ -349,8 +349,8 @@ def site_settings():
     form = NewSettingForm(theme=get_current_theme().value,address=get_site_url().value)
 
     if form.validate_on_submit():
-        set_current_theme(form.theme.data)
-        set_site_url(form.address.data)
+        update_current_theme(form.theme.data)
+        update_site_url(form.address.data)
         
         return redirect(url_for('.index'))
 

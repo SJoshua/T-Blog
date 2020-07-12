@@ -68,38 +68,6 @@ def insert_tag_relation(article_id=None,tag_id=None):
     db_session.add(new_tag_relation)
     db_session.commit()
 
-#update part
-def update_article(article_id=None, title=None, content=None, category=None):
-    db_session.query(Article).filter(Article.id == article_id).update({"title": title, "content": content, "category": category})
-    db_session.commit()
-
-def update_comment(comment_id=None,author=None,content=None):
-    db_session.query(Comment).filter(Comment.id==comment_id).update({"author":author,"content":content})
-    db_session.commit()
-
-def update_tag(tag_id=None,name=None):
-    db_session.query(Tag).filter(Tag.id==tag_id).update({"name":name})
-    db_session.commit()
-
-def update_category(category_id=None,name=None):
-    db_session.query(Category).filter(Category.id==category_id).update({"name":name})
-    db_session.commit()
-
-def update_setting(key, value):
-    if get_setting_value(key):
-        db_session.query(Setting).filter(Setting.key == key).update({"value": value})
-    else:
-        db_session.add(Setting(key=key, value=value))
-    db_session.commit()
-
-def update_current_theme(value=None):
-    db_session.query(Setting).filter(Setting.key == 'current_theme').update({"value":value})
-    db_session.commit()
-
-def update_site_url(value=None):
-    db_session.query(Setting).filter(Setting.key == 'site_url').update({"value":value})
-    db_session.commit()
-
 #drop part
 def drop_user(id):
     articles = db_session.query(Article).filter(Article.author == id).all()
@@ -137,6 +105,38 @@ def drop_tag_relation(article_id=None):
 
 def drop_article_relation(tag_id=None):
     db_session.query(Tag_Relation).filter(Tag_Relation.tag_id==tag_id).delete()
+    db_session.commit()
+
+#update part
+def update_article(article_id=None, title=None, content=None, category=None):
+    db_session.query(Article).filter(Article.id == article_id).update({"title": title, "content": content, "category": category})
+    db_session.commit()
+
+def update_comment(comment_id=None,author=None,content=None):
+    db_session.query(Comment).filter(Comment.id==comment_id).update({"author":author,"content":content})
+    db_session.commit()
+
+def update_tag(tag_id=None,name=None):
+    db_session.query(Tag).filter(Tag.id==tag_id).update({"name":name})
+    db_session.commit()
+
+def update_category(category_id=None,name=None):
+    db_session.query(Category).filter(Category.id==category_id).update({"name":name})
+    db_session.commit()
+
+def update_setting(key, value):
+    if get_setting_value(key):
+        db_session.query(Setting).filter(Setting.key == key).update({"value": value})
+    else:
+        db_session.add(Setting(key=key, value=value))
+    db_session.commit()
+
+def update_current_theme(value=None):
+    db_session.query(Setting).filter(Setting.key == 'current_theme').update({"value":value})
+    db_session.commit()
+
+def update_site_url(value=None):
+    db_session.query(Setting).filter(Setting.key == 'site_url').update({"value":value})
     db_session.commit()
 
 #get part
